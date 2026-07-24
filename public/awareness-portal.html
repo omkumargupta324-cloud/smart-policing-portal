@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Omnagar Police | Awareness & Resources</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  
+  <style>
+    body { font-family: 'Poppins', sans-serif; background: #f0f4f8; margin: 0; color: #2d3748; }
+    
+    .hero { background: linear-gradient(135deg, #1a365d 0%, #2b6cb0 100%); color: white; padding: 60px 20px 100px; text-align: center; }
+    .hero h1 { margin: 0; font-size: 32px; font-weight: 700; }
+    .hero p { margin: 10px 0 0 0; color: #90cdf4; font-size: 16px; }
+    
+    .main-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 30px;
+      max-width: 1100px;
+      margin: -60px auto 50px;
+      padding: 0 20px;
+    }
+
+    .card { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); position: relative; z-index: 10; }
+    .card h2 { margin-top: 0; font-size: 20px; display: flex; align-items: center; gap: 10px; border-bottom: 2px solid #e2e8f0; padding-bottom: 15px; }
+    
+    /* Helplines Styling */
+    .helpline-item { display: flex; align-items: center; justify-content: space-between; padding: 15px 0; border-bottom: 1px solid #edf2f7; }
+    .helpline-item:last-child { border-bottom: none; }
+    .helpline-info { display: flex; align-items: center; gap: 15px; font-weight: 600; color: #4a5568; }
+    .helpline-info i { color: #e53e3e; font-size: 20px; width: 25px; text-align: center; }
+    .helpline-number { background: #fed7d7; color: #c53030; padding: 5px 15px; border-radius: 20px; font-weight: bold; font-size: 18px; letter-spacing: 1px; }
+
+    /* Cyber Tips Styling */
+    .tip-item { background: #ebf8ff; border-left: 4px solid #3182ce; padding: 15px; margin-bottom: 15px; border-radius: 4px 8px 8px 4px; font-size: 14px; line-height: 1.5; color: #2b6cb0; font-weight: 600; display: flex; gap: 15px; align-items: flex-start; }
+    .tip-item i { font-size: 20px; margin-top: 2px; }
+
+    /* Video Resource Styling */
+    .video-placeholder { background: #1a202c; height: 180px; border-radius: 8px; display: flex; justify-content: center; align-items: center; color: white; margin-bottom: 20px; cursor: pointer; transition: 0.3s; position: relative; }
+    .video-placeholder:hover { transform: scale(1.02); }
+    .video-placeholder i { font-size: 40px; color: #e53e3e; }
+    .video-placeholder span { position: absolute; bottom: 10px; left: 15px; font-size: 14px; font-weight: bold; }
+  </style>
+</head>
+<body>
+
+  <div class="hero">
+    <h1><i class="fa-solid fa-book-open-reader"></i> OMNAGAR POLICE</h1>
+    <p>Public Awareness & Emergency Resources</p>
+  </div>
+
+  <div class="main-grid">
+    
+    <!-- Emergency Helplines -->
+    <div class="card">
+      <h2 style="color: #c53030;"><i class="fa-solid fa-phone-volume"></i> Emergency Helplines</h2>
+      <div id="helplines-container">
+        <p style="text-align: center; color: #a0aec0;"><i class="fa-solid fa-spinner fa-spin"></i> Loading contacts...</p>
+      </div>
+    </div>
+
+    <!-- Cyber Security Tips -->
+    <div class="card">
+      <h2 style="color: #2b6cb0;"><i class="fa-solid fa-shield-virus"></i> Cyber Security Alerts</h2>
+      <div id="cyber-container"></div>
+    </div>
+
+    <!-- Traffic Rules Videos (Static UI) -->
+    <div class="card">
+      <h2 style="color: #276749;"><i class="fa-solid fa-video"></i> Traffic Guidelines</h2>
+      
+      <div class="video-placeholder">
+        <i class="fa-brands fa-youtube"></i>
+        <span>Understanding Smart Traffic Signals</span>
+      </div>
+      
+      <div class="video-placeholder">
+        <i class="fa-brands fa-youtube"></i>
+        <span>Helmet Safety & New Fines (2026)</span>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    // Fetch and populate dynamic resources from the backend
+    async function loadResources() {
+      try {
+        const response = await fetch('/api/resources');
+        const data = await response.json();
+
+        if (response.ok) {
+          // Populate Helplines
+          const helplinesContainer = document.getElementById('helplines-container');
+          helplinesContainer.innerHTML = '';
+          data.helplines.forEach(line => {
+            helplinesContainer.innerHTML += `
+              <div class="helpline-item">
+                <div class="helpline-info">
+                  <i class="fa-solid ${line.icon}"></i> ${line.name}
+                </div>
+                <div class="helpline-number">${line.number}</div>
+              </div>
+            `;
+          });
+
+          // Populate Cyber Tips
+          const cyberContainer = document.getElementById('cyber-container');
+          cyberContainer.innerHTML = '';
+          data.cyberTips.forEach(tip => {
+            cyberContainer.innerHTML += `
+              <div class="tip-item">
+                <i class="fa-solid fa-circle-exclamation"></i>
+                <div>${tip}</div>
+              </div>
+            `;
+          });
+        }
+      } catch (error) {
+        console.error('Failed to load resources from server.');
+      }
+    }
+
+    loadResources();
+  </script>
+</body>
+</html>

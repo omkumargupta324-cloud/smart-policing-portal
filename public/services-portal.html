@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Omnagar Police | Services & Certificates</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  
+  <style>
+    body { font-family: 'Poppins', sans-serif; background: #f0f4f8; margin: 0; color: #2d3748; }
+    
+    .hero { background: linear-gradient(135deg, #1a365d 0%, #2b6cb0 100%); color: white; padding: 50px 20px 100px; text-align: center; }
+    .hero h1 { margin: 0; font-size: 30px; font-weight: 700; }
+    .hero p { margin: 10px 0 0 0; color: #90cdf4; font-size: 16px; }
+    
+    .container { max-width: 650px; margin: -60px auto 50px; background: white; padding: 40px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); position: relative; }
+    
+    .form-group { margin-bottom: 20px; }
+    label { display: block; margin-bottom: 8px; font-weight: 600; color: #4a5568; font-size: 14px; }
+    input, select { width: 100%; padding: 12px; border: 2px solid #e2e8f0; border-radius: 8px; box-sizing: border-box; font-size: 15px; font-family: 'Poppins'; background: #f7fafc; transition: 0.3s; }
+    input:focus, select:focus { border-color: #3182ce; background: white; outline: none; }
+    
+    button { width: 100%; padding: 15px; background: linear-gradient(135deg, #3182ce, #2b6cb0); color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: 700; cursor: pointer; transition: 0.3s; margin-top: 10px; }
+    button:hover { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(49, 130, 206, 0.4); }
+    
+    .pay-btn { background: linear-gradient(135deg, #38a169, #276749); }
+    .pay-btn:hover { box-shadow: 0 6px 15px rgba(56, 161, 105, 0.4); }
+
+    /* Step Panels */
+    #step-2-payment, #step-3-success { display: none; text-align: center; }
+    
+    .fee-box { background: #fffaf0; border: 2px solid #fbd38d; padding: 20px; border-radius: 8px; margin: 20px 0; font-size: 18px; color: #975a16; }
+    .fee-box span { font-size: 28px; font-weight: bold; color: #dd6b20; display: block; margin-top: 10px; }
+    
+    .success-box { background: #f0fff4; border: 2px solid #9ae6b4; padding: 30px; border-radius: 8px; color: #276749; }
+    .success-box i { font-size: 40px; color: #38a169; margin-bottom: 15px; }
+    .data-row { display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 10px; border-bottom: 1px solid rgba(0,0,0,0.05); padding-bottom: 5px; }
+    .officer-badge { background: white; padding: 12px; border-radius: 6px; border: 1px solid #e2e8f0; margin-top: 20px; font-weight: bold; color: #2b6cb0; }
+  </style>
+</head>
+<body>
+
+  <div class="hero">
+    <h1><i class="fa-solid fa-file-signature"></i> OMNAGAR POLICE</h1>
+    <p>Official Verifications & Certificates Portal</p>
+  </div>
+
+  <div class="container">
+    
+    <!-- STEP 1: Application Form -->
+    <div id="step-1-form">
+      <h2 style="margin-top:0; border-bottom:2px solid #e2e8f0; padding-bottom:10px;"><i class="fa-solid fa-id-card-clip"></i> Application Details</h2>
+      <form id="services-form">
+        <div class="form-group">
+          <label>Applicant Full Name</label>
+          <input type="text" id="appName" required placeholder="Enter your full name">
+        </div>
+        <div class="form-group">
+          <label>Service Type</label>
+          <select id="appService" required>
+            <option value="" disabled selected>Select verification type...</option>
+            <option value="Tenant Verification">Tenant Verification</option>
+            <option value="Employee Verification">Employee / Domestic Help Verification</option>
+            <option value="Event NOC">Event No Objection Certificate (NOC)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Government ID Number (Aadhaar / PAN)</label>
+          <input type="text" id="appDocId" required placeholder="Enter ID number">
+        </div>
+        <button type="submit" id="btn-submit-app">Proceed to Payment</button>
+      </form>
+    </div>
+
+    <!-- STEP 2: Payment Gate -->
+    <div id="step-2-payment">
+      <h2 style="margin-top:0; color:#1a202c;">Complete Your Application</h2>
+      <p style="color:#718096;">Application Ref: <strong id="display-ref"></strong></p>
+      
+      <div class="fee-box">
+        Required Processing Fee
+        <span id="display-fee">₹0</span>
+      </div>
+      
+      <button class="pay-btn" id="btn-pay-fee">
+        <i class="fa-solid fa-credit-card" style="margin-right: 8px;"></i> Pay Now to Submit
+      </button>
+    </div>
+
+    <!-- STEP 3: Success & Officer Assignment -->
+    <div id="step-3-success">
+      <div class="success-box">
+        <i class="fa-solid fa-file-circle-check"></i>
+        <h2 style="margin:0 0 15px 0;">Application Active</h2>
+        
+        <div class="data-row"><strong>Reference No:</strong> <span id="final-ref"></span></div>
+        <div class="data-row"><strong>Service:</strong> <span id="final-service"></span></div>
+        <div class="data-row"><strong>Transaction ID:</strong> <span id="final-txn"></span></div>
+        
+        <div class="officer-badge" id="final-officer"></div>
+        <p style="font-size:12px; color:#718096; margin-top:20px;">Download your receipt. You will be contacted shortly for physical verification.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    let currentAppId = '';
+    let currentService = '';
+
+    // Step 1: Submit Form to get Fee
+    document.getElementById('services-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = document.getElementById('btn-submit-app');
+      btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Processing...';
+
+      try {
+        const res = await fetch('/api/services/apply', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            applicantName: document.getElementById('appName').value,
+            serviceType: document.getElementById('appService').value,
+            documentId: document.getElementById('appDocId').value
+          })
+        });
+        const data = await res.json();
+
+        if (res.ok) {
+          currentAppId = data.applicationId;
+          currentService = data.serviceType;
+          
+          document.getElementById('step-1-form').style.display = 'none';
+          document.getElementById('display-ref').textContent = data.applicationId;
+          document.getElementById('display-fee').textContent = '₹' + data.feeAmount;
+          document.getElementById('step-2-payment').style.display = 'block';
+        }
+      } catch (error) { alert('Error processing application.'); btn.textContent = 'Proceed to Payment'; }
+    });
+
+    // Step 2: Pay the Fee
+    document.getElementById('btn-pay-fee').addEventListener('click', async () => {
+      const btn = document.getElementById('btn-pay-fee');
+      btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Processing Payment...';
+
+      try {
+        const res = await fetch('/api/services/pay', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ applicationId: currentAppId })
+        });
+        const data = await res.json();
+
+        if (res.ok) {
+          document.getElementById('step-2-payment').style.display = 'none';
+          document.getElementById('final-ref').textContent = currentAppId;
+          document.getElementById('final-service').textContent = currentService;
+          document.getElementById('final-txn').textContent = data.transactionId;
+          document.getElementById('final-officer').innerHTML = `<i class="fa-solid fa-user-shield"></i> ${data.assignedTo}`;
+          document.getElementById('step-3-success').style.display = 'block';
+        }
+      } catch (error) { alert('Payment failed.'); btn.innerHTML = '<i class="fa-solid fa-credit-card"></i> Pay Now to Submit'; }
+    });
+  </script>
+</body>
+</html>

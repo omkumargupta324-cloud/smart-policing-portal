@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Traffic Command | Omnagar Police</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #101520;
+      color: #e2e8f0;
+      margin: 0;
+    }
+    .navbar {
+      background: linear-gradient(135deg, #1a365d 0%, #101520 100%);
+      padding: 15px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+    .navbar h1 {
+      margin: 0;
+      font-size: 20px;
+      color: #fff;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .logout-btn {
+      background: transparent;
+      color: #e53e3e;
+      border: 1px solid #e53e3e;
+      padding: 8px 16px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: all 0.3s;
+    }
+    .logout-btn:hover {
+      background: #e53e3e;
+      color: #fff;
+    }
+    .container {
+      max-width: 800px;
+      margin: 40px auto;
+      background: rgba(255, 255, 255, 0.05);
+      padding: 30px;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .form-group { margin-bottom: 15px; }
+    label { display: block; margin-bottom: 5px; color: #a0aec0; }
+    input {
+      width: 100%; padding: 10px; border-radius: 4px;
+      border: 1px solid #4a5568; background: #1a202c; color: #fff; box-sizing: border-box;
+    }
+    button.submit-btn {
+      background: #2c5282; color: #fff; border: none; padding: 12px 20px;
+      border-radius: 4px; cursor: pointer; font-weight: bold; margin-top: 10px;
+    }
+    button.submit-btn:hover { background: #3182ce; }
+  </style>
+</head>
+<body>
+
+  <nav class="navbar">
+    <h1>Traffic Command - E-Challan System</h1>
+    <button class="logout-btn" onclick="logout()">Logout</button>
+  </nav>
+
+  <div class="container">
+    <h2>Issue New Challan</h2>
+    <form id="challan-form">
+      <div class="form-group">
+        <label>Challan ID</label>
+        <input type="text" id="challanId" required placeholder="e.g. CHL-9921">
+      </div>
+      <div class="form-group">
+        <label>Vehicle Plate Number</label>
+        <input type="text" id="vehiclePlate" required placeholder="e.g. JH-05-AB-1234">
+      </div>
+      <div class="form-group">
+        <label>Violation Type</label>
+        <input type="text" id="violationType" required placeholder="e.g. Speeding">
+      </div>
+      <div class="form-group">
+        <label>Fine Amount (₹)</label>
+        <input type="number" id="fineAmount" required placeholder="e.g. 1000">
+      </div>
+      <button type="submit" class="submit-btn">Issue Ticket</button>
+    </form>
+  </div>
+
+  <script>
+    // Security Check: If no ticket is found in the browser, kick them out
+    const token = localStorage.getItem('token');
+    if (!token) {
+      window.location.href = '/';
+    }
+
+    // Logout Function
+    function logout() {
+      localStorage.removeItem('token');
+      window.location.href = '/';
+    }
+  </script>
+</body>
+</html>

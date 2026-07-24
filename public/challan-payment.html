@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Omnagar Police | E-Challan Payment</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  
+  <style>
+    /* Reusing our premium base styles */
+    body { font-family: 'Poppins', sans-serif; background: #f0f4f8; margin: 0; color: #2d3748; }
+    .hero { background: linear-gradient(135deg, #1a365d 0%, #2b6cb0 100%); color: white; padding: 60px 20px 120px; text-align: center; }
+    .hero h1 { margin: 0; font-size: 32px; font-weight: 700; letter-spacing: 1px; }
+    .hero p { margin: 10px 0 0 0; color: #90cdf4; font-size: 16px; }
+    .hero i { font-size: 40px; margin-bottom: 15px; color: #63b3ed; }
+    
+    .container { max-width: 600px; margin: -70px auto 50px; background: white; padding: 45px; border-radius: 16px; box-shadow: 0 15px 35px rgba(0,0,0,0.1); position: relative; }
+    .form-header { text-align: center; margin-bottom: 30px; }
+    .form-header h2 { margin: 0; color: #1a202c; font-size: 22px; }
+    
+    .input-with-icon { position: relative; margin-bottom: 20px; }
+    .input-with-icon i { position: absolute; left: 16px; top: 15px; color: #a0aec0; }
+    .input-with-icon input { width: 100%; padding: 14px 14px 14px 45px; border: 2px solid #e2e8f0; border-radius: 8px; box-sizing: border-box; font-size: 15px; font-family: 'Poppins'; background: #f7fafc; transition: 0.3s; }
+    .input-with-icon input:focus { border-color: #3182ce; background: white; outline: none; }
+    
+    button { width: 100%; padding: 16px; background: linear-gradient(135deg, #3182ce, #2b6cb0); color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: 700; cursor: pointer; transition: 0.3s; }
+    button:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(49, 130, 206, 0.4); }
+
+    /* Fine Details Box */
+    #fine-details { display: none; background: #fffaf0; border: 2px solid #fbd38d; border-radius: 12px; padding: 25px; margin-top: 25px; }
+    .fine-row { display: flex; justify-content: space-between; margin-bottom: 15px; border-bottom: 1px solid #e2e8f0; padding-bottom: 10px; }
+    .fine-row strong { color: #2d3748; }
+    .fine-amount { font-size: 24px; color: #c53030; font-weight: 700; text-align: center; margin: 20px 0; }
+    
+    .pay-btn { background: linear-gradient(135deg, #38a169, #276749); margin-top: 10px; }
+    .pay-btn:hover { box-shadow: 0 6px 20px rgba(56, 161, 105, 0.4); }
+
+    /* Success Box */
+    #success-box { display: none; background: #f0fff4; border: 2px solid #9ae6b4; border-radius: 12px; padding: 30px; text-align: center; margin-top: 25px; }
+    #success-box i { font-size: 48px; color: #38a169; margin-bottom: 15px; }
+  </style>
+</head>
+<body>
+
+  <div class="hero">
+    <i class="fa-solid fa-file-invoice-dollar"></i>
+    <h1>OMNAGAR POLICE</h1>
+    <p>Official E-Challan & Fine Payment Portal</p>
+  </div>
+
+  <div class="container">
+    <div id="search-section">
+      <div class="form-header">
+        <h2>Find Your Challan</h2>
+        <p style="color: #718096; margin-top: 5px;">Enter your Vehicle Plate No. or Challan ID</p>
+      </div>
+
+      <form id="search-form">
+        <div class="input-with-icon">
+          <i class="fa-solid fa-car"></i>
+          <input type="text" id="searchQuery" required placeholder="e.g. JH-05-AB-1234 or CHL-9921">
+        </div>
+        <button type="submit" id="search-btn"><i class="fa-solid fa-magnifying-glass" style="margin-right: 8px;"></i> Search Records</button>
+      </form>
+    </div>
+
+    <!-- Fine Details Result -->
+    <div id="fine-details">
+      <h3 style="margin-top: 0; color: #dd6b20;"><i class="fa-solid fa-circle-exclamation"></i> Unpaid Challan Found</h3>
+      <div class="fine-row"><span>Challan ID:</span> <strong id="res-id"></strong></div>
+      <div class="fine-row"><span>Vehicle Plate:</span> <strong id="res-plate"></strong></div>
+      <div class="fine-row"><span>Violation:</span> <strong id="res-violation"></strong></div>
+      <div class="fine-amount">₹<span id="res-amount"></span></div>
+      
+      <button class="pay-btn" id="pay-btn">
+        <i class="fa-brands fa-google-pay" style="margin-right: 8px; font-size: 20px;"></i> Pay Now with UPI/QR
+      </button>
+    </div>
+
+    <!-- Payment Success Ticket -->
+    <div id="success-box">
+      <i class="fa-solid fa-circle-check"></i>
+      <h2 style="margin: 0; color: #276749;">Payment Successful!</h2>
+      <p style="color: #4a5568; margin-top: 10px;">Your traffic challan has been cleared.</p>
+      <div style="background: #c6f6d5; padding: 10px; border-radius: 8px; margin: 15px 0; font-weight: bold; color: #22543d;">
+        Transaction ID: <span id="res-txn"></span>
+      </div>
+      <button style="background: #4a5568;" onclick="window.location.reload()">
+        <i class="fa-solid fa-download" style="margin-right: 8px;"></i> Download E-Receipt
+      </button>
+    </div>
+  </div>
+
+  <script>
+    let currentChallanId = '';
+
+    // 1. Handle the Search Form
+    document.getElementById('search-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const searchBtn = document.getElementById('search-btn');
+      searchBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Searching...';
+
+      try {
+        const response = await fetch('/api/public-challans/search', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ searchQuery: document.getElementById('searchQuery').value })
+        });
+        const data = await response.json();
+
+        if (response.ok) {
+          // Populate and show the fine details
+          document.getElementById('search-section').style.display = 'none';
+          document.getElementById('res-id').textContent = data.challanId;
+          document.getElementById('res-plate').textContent = data.vehiclePlate;
+          document.getElementById('res-violation').textContent = data.violationType;
+          document.getElementById('res-amount').textContent = data.fineAmount;
+          
+          currentChallanId = data.challanId;
+          document.getElementById('fine-details').style.display = 'block';
+        }
+      } catch (error) {
+        alert('Server error. Please try again.');
+        searchBtn.innerHTML = '<i class="fa-solid fa-magnifying-glass"></i> Search Records';
+      }
+    });
+
+    // 2. Handle the Payment Button
+    document.getElementById('pay-btn').addEventListener('click', async () => {
+      const payBtn = document.getElementById('pay-btn');
+      payBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Processing UPI...';
+
+      try {
+        const response = await fetch('/api/public-challans/pay', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ challanId: currentChallanId })
+        });
+        const data = await response.json();
+
+        if (response.ok) {
+          // Hide fine details and show success receipt
+          document.getElementById('fine-details').style.display = 'none';
+          document.getElementById('res-txn').textContent = data.transactionId;
+          document.getElementById('success-box').style.display = 'block';
+        }
+      } catch (error) {
+        alert('Payment failed. Please try again.');
+        payBtn.innerHTML = '<i class="fa-brands fa-google-pay"></i> Pay Now with UPI/QR';
+      }
+    });
+  </script>
+</body>
+</html>

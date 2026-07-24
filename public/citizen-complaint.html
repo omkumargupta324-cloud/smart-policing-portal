@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Omnagar Police | Public Grievance Portal</title>
+  <!-- Importing a modern font and professional icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: #f0f4f8;
+      margin: 0;
+      color: #2d3748;
+    }
+
+    /* Dynamic Hero Banner */
+    .hero {
+      background: linear-gradient(135deg, #1a365d 0%, #2b6cb0 100%);
+      color: white;
+      padding: 60px 20px 120px;
+      text-align: center;
+      position: relative;
+    }
+    .hero h1 { margin: 0; font-size: 32px; font-weight: 700; letter-spacing: 1px; }
+    .hero p { margin: 10px 0 0 0; color: #90cdf4; font-size: 16px; font-weight: 300; }
+    .hero i { font-size: 40px; margin-bottom: 15px; color: #63b3ed; }
+
+    /* Elevated Form Container */
+    .container {
+      max-width: 650px;
+      margin: -70px auto 50px;
+      background: white;
+      padding: 45px;
+      border-radius: 16px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      position: relative;
+      z-index: 10;
+    }
+
+    .form-header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .form-header h2 { margin: 0; color: #1a202c; font-size: 22px; }
+    .form-header p { color: #718096; font-size: 14px; margin-top: 5px; }
+
+    .form-group { margin-bottom: 24px; }
+    label { display: block; margin-bottom: 8px; font-weight: 600; color: #4a5568; font-size: 14px; }
+    
+    /* Input Fields with Embedded Icons */
+    .input-with-icon {
+      position: relative;
+    }
+    .input-with-icon i {
+      position: absolute;
+      left: 16px;
+      top: 15px;
+      color: #a0aec0;
+      font-size: 16px;
+    }
+    .input-with-icon input, .input-with-icon select {
+      width: 100%;
+      padding: 14px 14px 14px 45px;
+      border: 2px solid #e2e8f0;
+      border-radius: 8px;
+      box-sizing: border-box;
+      font-size: 15px;
+      font-family: 'Poppins', sans-serif;
+      transition: all 0.3s ease;
+      background: #f7fafc;
+    }
+    .input-with-icon input:focus, .input-with-icon select:focus {
+      border-color: #3182ce;
+      background: white;
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.15);
+    }
+    
+    textarea {
+      width: 100%;
+      padding: 14px;
+      border: 2px solid #e2e8f0;
+      border-radius: 8px;
+      box-sizing: border-box;
+      font-size: 15px;
+      font-family: 'Poppins', sans-serif;
+      transition: all 0.3s ease;
+      background: #f7fafc;
+      resize: vertical;
+    }
+    textarea:focus {
+      border-color: #3182ce;
+      background: white;
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.15);
+    }
+
+    /* Modern Hover Button */
+    button {
+      width: 100%;
+      padding: 16px;
+      background: linear-gradient(135deg, #3182ce, #2b6cb0);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(49, 130, 206, 0.4);
+      transition: all 0.3s ease;
+    }
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(49, 130, 206, 0.6);
+    }
+
+    /* Redesigned Success Ticket */
+    #success-box {
+      display: none;
+      background: #f0fff4;
+      border: 2px solid #9ae6b4;
+      border-left: 8px solid #38a169;
+      border-radius: 12px;
+      padding: 30px;
+      text-align: center;
+      animation: slideDown 0.5s ease-out;
+    }
+    @keyframes slideDown {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    #success-box i.fa-circle-check {
+      font-size: 48px;
+      color: #38a169;
+      margin-bottom: 15px;
+    }
+    .tracking-id {
+      font-size: 28px;
+      font-weight: 700;
+      color: #276749;
+      letter-spacing: 2px;
+      margin: 15px 0;
+      background: #c6f6d5;
+      display: inline-block;
+      padding: 10px 25px;
+      border-radius: 8px;
+    }
+    .officer-details {
+      background: white;
+      padding: 15px;
+      border-radius: 8px;
+      margin-top: 20px;
+      border: 1px solid #e2e8f0;
+      font-weight: 600;
+      color: #2b6cb0;
+    }
+    .officer-details i { margin-right: 8px; }
+  </style>
+</head>
+<body>
+
+  <!-- Dynamic Header Banner -->
+  <div class="hero">
+    <i class="fa-solid fa-shield-halved"></i>
+    <h1>OMNAGAR POLICE</h1>
+    <p>Official Public Grievance & FIR Portal</p>
+  </div>
+
+  <div class="container">
+    <div id="form-container">
+      <div class="form-header">
+        <h2>File a New Report</h2>
+        <p>Your data is securely transmitted and encrypted.</p>
+      </div>
+
+      <form id="complaint-form">
+        <div class="form-group">
+          <label>Full Name</label>
+          <div class="input-with-icon">
+            <i class="fa-regular fa-user"></i>
+            <input type="text" id="citizenName" required placeholder="Enter your full name">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Mobile Number (For SMS Updates)</label>
+          <div class="input-with-icon">
+            <i class="fa-solid fa-mobile-screen"></i>
+            <input type="tel" id="phone" required placeholder="10-digit mobile number">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Incident Type</label>
+          <div class="input-with-icon">
+            <i class="fa-solid fa-layer-group"></i>
+            <select id="incidentType" required>
+              <option value="" disabled selected>Select the category of your complaint...</option>
+              <option value="Lost Item">Lost Item / Document</option>
+              <option value="Cyber Crime">Cyber Crime / Online Fraud</option>
+              <option value="Non-Cognizable">Non-Cognizable Offense (General Dispute)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Detailed Description</label>
+          <textarea id="description" rows="5" required placeholder="Please provide the exact location, time, and specific details of the incident..."></textarea>
+        </div>
+
+        <button type="submit" id="submit-btn">
+          <i class="fa-solid fa-paper-plane" style="margin-right: 8px;"></i> Submit Complaint
+        </button>
+      </form>
+    </div>
+
+    <!-- Enhanced Success Ticket -->
+    <div id="success-box">
+      <i class="fa-solid fa-circle-check"></i>
+      <h2 style="margin: 0; color: #276749;">Report Registered!</h2>
+      <p style="color: #4a5568; margin-top: 5px;">Your complaint has been successfully logged.</p>
+      
+      <div class="tracking-id" id="display-tracking"></div>
+      
+      <!-- Explicitly using the requested terminology -->
+      <div class="officer-details" id="display-officer">
+        <i class="fa-solid fa-user-shield"></i> Investigating Officer: Pending Assignment
+      </div>
+      
+      <p style="font-size: 13px; color: #718096; margin-top: 20px;">
+        <i class="fa-solid fa-circle-info"></i> The 48-hour automated escalation timer has officially started.
+      </p>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('complaint-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const submitBtn = document.getElementById('submit-btn');
+      submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin" style="margin-right: 8px;"></i> Submitting...';
+      submitBtn.style.opacity = '0.7';
+
+      // Using your exact original payload structure
+      const payload = {
+        citizenName: document.getElementById('citizenName').value,
+        phone: document.getElementById('phone').value,
+        incidentType: document.getElementById('incidentType').value,
+        description: document.getElementById('description').value
+      };
+
+      try {
+        // Notice we removed the http://127.0.0.1 part! 
+        // We also added /submit back to match your original code perfectly.
+        const response = await fetch('/api/complaints/submit', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          document.getElementById('form-container').style.display = 'none';
+          document.getElementById('display-tracking').textContent = data._id || data.trackingId || 'TICKET-LOGGED';
+          document.getElementById('display-officer').innerHTML = `<i class="fa-solid fa-user-shield"></i> Assigned to: IO (Level 0)`;
+          document.getElementById('success-box').style.display = 'block';
+        } else {
+          alert('Server Error: ' + (data.message || 'Could not save to database.'));
+          submitBtn.innerHTML = '<i class="fa-solid fa-paper-plane" style="margin-right: 8px;"></i> Submit Complaint';
+          submitBtn.style.opacity = '1';
+        }
+      } catch (error) {
+        console.error('Connection Error:', error);
+        alert('Server connection failed. Check your terminal logs.');
+        submitBtn.innerHTML = '<i class="fa-solid fa-paper-plane" style="margin-right: 8px;"></i> Submit Complaint';
+        submitBtn.style.opacity = '1';
+      }
+    });
+  </script>
+</body>
+</html>

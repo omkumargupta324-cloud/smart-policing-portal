@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>City Command | Omnagar Police</title>
+  <style>
+    /* We use the exact same CSS structure as the Traffic board for consistency */
+    body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #101520; color: #e2e8f0; margin: 0; }
+    .navbar { background: linear-gradient(135deg, #1a365d 0%, #101520 100%); padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1); }
+    .navbar h1 { margin: 0; font-size: 20px; color: #fff; text-transform: uppercase; }
+    .logout-btn { background: transparent; color: #e53e3e; border: 1px solid #e53e3e; padding: 8px 16px; border-radius: 4px; cursor: pointer; font-weight: bold; }
+    .logout-btn:hover { background: #e53e3e; color: #fff; }
+    .container { max-width: 800px; margin: 40px auto; background: rgba(255,255,255,0.05); padding: 30px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.08); }
+    .form-group { margin-bottom: 15px; }
+    label { display: block; margin-bottom: 5px; color: #a0aec0; }
+    input, textarea { width: 100%; padding: 10px; border-radius: 4px; border: 1px solid #4a5568; background: #1a202c; color: #fff; box-sizing: border-box; }
+    button.submit-btn { background: #2c5282; color: #fff; border: none; padding: 12px 20px; border-radius: 4px; cursor: pointer; font-weight: bold; margin-top: 10px; }
+    button.submit-btn:hover { background: #3182ce; }
+  </style>
+</head>
+<body>
+
+  <nav class="navbar">
+    <h1>City Command - FIR Registry</h1>
+    <button class="logout-btn" onclick="logout()">Logout</button>
+  </nav>
+
+  <div class="container">
+    <h2>File New FIR</h2>
+    <form id="fir-form">
+      <div class="form-group">
+        <label>Case Number</label>
+        <input type="text" id="caseNumber" required placeholder="e.g. FIR-2026-001">
+      </div>
+      <div class="form-group">
+        <label>Incident Description</label>
+        <textarea id="description" rows="5" required placeholder="Provide detailed report of the incident..."></textarea>
+      </div>
+      <button type="submit" class="submit-btn">File Report</button>
+    </form>
+  </div>
+
+  <script>
+    // Security Check
+    const token = localStorage.getItem('token');
+    if (!token) {
+      window.location.href = '/';
+    }
+
+    // Logout Function
+    function logout() {
+      localStorage.removeItem('token');
+      window.location.href = '/';
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Omnagar Police | Community Connect</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  
+  <style>
+    body { font-family: 'Poppins', sans-serif; background: #f0f4f8; margin: 0; color: #2d3748; }
+    
+    .hero { background: linear-gradient(135deg, #1a365d 0%, #2b6cb0 100%); color: white; padding: 50px 20px 90px; text-align: center; }
+    .hero h1 { margin: 0; font-size: 32px; font-weight: 700; }
+    .hero p { margin: 10px 0 0 0; color: #90cdf4; font-size: 16px; }
+    
+    .main-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 30px;
+      max-width: 1000px;
+      margin: -50px auto 50px;
+      padding: 0 20px;
+    }
+
+    .card { background: white; padding: 40px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); position: relative; z-index: 10; }
+    .card h2 { margin-top: 0; color: #1a202c; font-size: 20px; display: flex; align-items: center; gap: 10px; border-bottom: 2px solid #e2e8f0; padding-bottom: 15px; }
+    
+    .form-group { margin-bottom: 20px; }
+    label { display: block; margin-bottom: 8px; font-weight: 600; color: #4a5568; font-size: 14px; }
+    input, select, textarea { width: 100%; padding: 12px; border: 2px solid #e2e8f0; border-radius: 8px; box-sizing: border-box; font-size: 15px; font-family: 'Poppins'; background: #f7fafc; transition: 0.3s; }
+    input:focus, select:focus, textarea:focus { border-color: #3182ce; background: white; outline: none; }
+    
+    button { width: 100%; padding: 14px; background: linear-gradient(135deg, #3182ce, #2b6cb0); color: white; border: none; border-radius: 8px; font-size: 15px; font-weight: 700; cursor: pointer; transition: 0.3s; margin-top: 10px; }
+    button:hover { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(49, 130, 206, 0.4); }
+
+    /* Result Boxes */
+    .result-box { display: none; margin-top: 20px; padding: 20px; border-radius: 8px; font-size: 14px; text-align: center; }
+    .result-box.success { background: #f0fff4; border: 1px solid #9ae6b4; color: #276749; }
+    .result-box i { font-size: 32px; color: #38a169; margin-bottom: 10px; }
+    
+    .officer-badge { background: white; padding: 10px; border-radius: 6px; border: 1px solid #e2e8f0; margin-top: 15px; font-weight: bold; color: #2b6cb0; text-align: center; }
+  </style>
+</head>
+<body>
+
+  <div class="hero">
+    <h1><i class="fa-solid fa-people-group"></i> OMNAGAR POLICE</h1>
+    <p>Community Connect & Volunteer Registration</p>
+  </div>
+
+  <div class="main-grid">
+    <!-- Left Card: Meet Your SHO -->
+    <div class="card">
+      <h2><i class="fa-solid fa-handshake" style="color: #3182ce;"></i> Book SHO Appointment</h2>
+      <form id="sho-form">
+        <div class="form-group">
+          <label>Full Name</label>
+          <input type="text" id="shoName" required placeholder="Enter your name">
+        </div>
+        <div class="form-group">
+          <label>Purpose of Meeting</label>
+          <select id="shoPurpose" required>
+            <option value="" disabled selected>Select purpose...</option>
+            <option value="Community Grievance">Community Grievance</option>
+            <option value="Event Permission">Event Permission / Discussion</option>
+            <option value="General Feedback">General Station Feedback</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Preferred Date</label>
+          <input type="date" id="shoDate" required>
+        </div>
+        <button type="submit" id="btn-sho">Request Appointment</button>
+      </form>
+
+      <div class="result-box success" id="sho-success">
+        <i class="fa-solid fa-calendar-check"></i>
+        <h3 style="margin: 5px 0 10px 0;">Request Submitted</h3>
+        <div>Booking ID: <strong id="res-sho-id"></strong></div>
+        <div class="officer-badge" id="res-sho-officer"></div>
+      </div>
+    </div>
+
+    <!-- Right Card: Police Mitra Registration -->
+    <div class="card">
+      <h2><i class="fa-solid fa-user-plus" style="color: #276749;"></i> Police Mitra Registration</h2>
+      <form id="mitra-form">
+        <div class="form-group">
+          <label>Full Name</label>
+          <input type="text" id="mitraName" required placeholder="Enter your name">
+        </div>
+        <div class="form-group">
+          <label>Primary Skill / Profession</label>
+          <input type="text" id="mitraSkill" required placeholder="e.g. IT Professional, Doctor, Teacher">
+        </div>
+        <div class="form-group">
+          <label>Why do you want to volunteer?</label>
+          <textarea id="mitraReason" rows="2" required placeholder="Briefly explain..."></textarea>
+        </div>
+        <button type="submit" id="btn-mitra" style="background: linear-gradient(135deg, #38a169, #276749);">Apply Now</button>
+      </form>
+
+      <div class="result-box success" id="mitra-success">
+        <i class="fa-solid fa-id-badge"></i>
+        <h3 style="margin: 5px 0 10px 0;">Application Received</h3>
+        <div>Registration ID: <strong id="res-mitra-id"></strong></div>
+        <div class="officer-badge" id="res-mitra-officer"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // 1. Handle SHO Booking
+    document.getElementById('sho-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = document.getElementById('btn-sho');
+      btn.textContent = 'Submitting...';
+
+      try {
+        const res = await fetch('/api/community/book-sho', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            citizenName: document.getElementById('shoName').value,
+            purpose: document.getElementById('shoPurpose').value,
+            date: document.getElementById('shoDate').value
+          })
+        });
+        const data = await res.json();
+
+        if (res.ok) {
+          document.getElementById('sho-form').style.display = 'none';
+          document.getElementById('res-sho-id').textContent = data.bookingId;
+          document.getElementById('res-sho-officer').innerHTML = `<i class="fa-solid fa-user-shield"></i> ${data.assignedTo}`;
+          document.getElementById('sho-success').style.display = 'block';
+        }
+      } catch (error) { alert('Error booking appointment.'); btn.textContent = 'Request Appointment'; }
+    });
+
+    // 2. Handle Mitra Registration
+    document.getElementById('mitra-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = document.getElementById('btn-mitra');
+      btn.textContent = 'Submitting...';
+
+      try {
+        const res = await fetch('/api/community/volunteer', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            volunteerName: document.getElementById('mitraName').value,
+            skills: document.getElementById('mitraSkill').value
+          })
+        });
+        const data = await res.json();
+
+        if (res.ok) {
+          document.getElementById('mitra-form').style.display = 'none';
+          document.getElementById('res-mitra-id').textContent = data.registrationId;
+          document.getElementById('res-mitra-officer').innerHTML = `<i class="fa-solid fa-user-shield"></i> ${data.assignedTo}`;
+          document.getElementById('mitra-success').style.display = 'block';
+        }
+      } catch (error) { alert('Error submitting application.'); btn.textContent = 'Apply Now'; }
+    });
+  </script>
+</body>
+</html>

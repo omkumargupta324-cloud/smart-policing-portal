@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Omnagar Police | Digital Evidence</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  
+  <style>
+    body { font-family: 'Poppins', sans-serif; background: #f0f4f8; margin: 0; color: #2d3748; }
+    
+    .hero { background: linear-gradient(135deg, #1a365d 0%, #2b6cb0 100%); color: white; padding: 50px 20px 90px; text-align: center; }
+    .hero h1 { margin: 0; font-size: 32px; font-weight: 700; }
+    .hero p { margin: 10px 0 0 0; color: #90cdf4; font-size: 16px; }
+    
+    .main-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 30px;
+      max-width: 1000px;
+      margin: -50px auto 50px;
+      padding: 0 20px;
+    }
+
+    .card { background: white; padding: 40px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); position: relative; z-index: 10; }
+    .card h2 { margin-top: 0; color: #1a202c; font-size: 20px; display: flex; align-items: center; gap: 10px; border-bottom: 2px solid #e2e8f0; padding-bottom: 15px; }
+    
+    .form-group { margin-bottom: 20px; }
+    label { display: block; margin-bottom: 8px; font-weight: 600; color: #4a5568; font-size: 14px; }
+    input, select { width: 100%; padding: 12px; border: 2px solid #e2e8f0; border-radius: 8px; box-sizing: border-box; font-size: 15px; font-family: 'Poppins'; background: #f7fafc; transition: 0.3s; }
+    input:focus, select:focus { border-color: #3182ce; background: white; outline: none; }
+    
+    /* Custom File Upload Styling */
+    .file-upload-wrapper { border: 2px dashed #a0aec0; border-radius: 8px; padding: 30px; text-align: center; background: #f7fafc; cursor: pointer; transition: 0.3s; margin-bottom: 20px; }
+    .file-upload-wrapper:hover { border-color: #3182ce; background: #ebf8ff; }
+    .file-upload-wrapper i { font-size: 40px; color: #718096; margin-bottom: 10px; }
+    .file-upload-wrapper p { margin: 0; color: #4a5568; font-size: 14px; }
+    input[type="file"] { display: none; }
+    
+    button { width: 100%; padding: 14px; background: linear-gradient(135deg, #3182ce, #2b6cb0); color: white; border: none; border-radius: 8px; font-size: 15px; font-weight: 700; cursor: pointer; transition: 0.3s; margin-top: 10px; }
+    button:hover { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(49, 130, 206, 0.4); }
+
+    /* Result Boxes */
+    .result-box { display: none; margin-top: 20px; padding: 20px; border-radius: 8px; font-size: 14px; text-align: center; }
+    .result-box.success { background: #f0fff4; border: 1px solid #9ae6b4; color: #276749; }
+    .result-box i { font-size: 32px; color: #38a169; margin-bottom: 10px; }
+    .officer-badge { background: white; padding: 10px; border-radius: 6px; border: 1px solid #e2e8f0; margin-top: 15px; font-weight: bold; color: #2b6cb0; text-align: center; }
+  </style>
+</head>
+<body>
+
+  <div class="hero">
+    <h1><i class="fa-solid fa-camera-retro"></i> OMNAGAR POLICE</h1>
+    <p>Digital Evidence & CCTV Registry</p>
+  </div>
+
+  <div class="main-grid">
+    <!-- Left Card: Upload Dashcam/Video -->
+    <div class="card">
+      <h2><i class="fa-solid fa-cloud-arrow-up" style="color: #3182ce;"></i> Upload Video Evidence</h2>
+      <form id="upload-form">
+        <div class="form-group">
+          <label>Incident Type</label>
+          <select id="uploadType" required>
+            <option value="" disabled selected>Select category...</option>
+            <option value="Traffic Violation / Accident">Traffic Violation / Accident</option>
+            <option value="Theft / Burglary">Theft / Burglary</option>
+            <option value="Other Crime">Other Crime / Altercation</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Location of Incident</label>
+          <input type="text" id="uploadLocation" required placeholder="Street name or landmark">
+        </div>
+        
+        <label>Attach Video File</label>
+        <label for="videoFile" class="file-upload-wrapper" id="file-label">
+          <i class="fa-solid fa-file-video"></i>
+          <p id="file-name-text">Click to select MP4 or MOV file</p>
+        </label>
+        <input type="file" id="videoFile" accept="video/mp4,video/quicktime">
+        
+        <button type="submit" id="btn-upload">Secure Upload</button>
+      </form>
+
+      <div class="result-box success" id="upload-success">
+        <i class="fa-solid fa-shield-check"></i>
+        <h3 style="margin: 5px 0 10px 0;">Transfer Complete</h3>
+        <div>Evidence ID: <strong id="res-upload-id"></strong></div>
+        <div class="officer-badge" id="res-upload-officer"></div>
+      </div>
+    </div>
+
+    <!-- Right Card: CCTV Registry -->
+    <div class="card">
+      <h2><i class="fa-solid fa-video" style="color: #276749;"></i> Register Private CCTV</h2>
+      <form id="cctv-form">
+        <div class="form-group">
+          <label>Business / Residence Name</label>
+          <input type="text" id="cctvName" required placeholder="e.g. Sharma Electronics">
+        </div>
+        <div class="form-group">
+          <label>Number of Road-Facing Cameras</label>
+          <input type="number" id="cctvCount" required min="1" placeholder="e.g. 2">
+        </div>
+        <div class="form-group">
+          <label>Complete Address</label>
+          <input type="text" id="cctvAddress" required placeholder="Street address...">
+        </div>
+        <button type="submit" id="btn-cctv" style="background: linear-gradient(135deg, #38a169, #276749);">Register Node</button>
+      </form>
+
+      <div class="result-box success" id="cctv-success">
+        <i class="fa-solid fa-network-wired"></i>
+        <h3 style="margin: 5px 0 10px 0;">Node Connected</h3>
+        <div>System Node ID: <strong id="res-cctv-id"></strong></div>
+        <div class="officer-badge" id="res-cctv-officer"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // UX logic for file upload label
+    const videoFile = document.getElementById('videoFile');
+    const fileNameText = document.getElementById('file-name-text');
+    videoFile.addEventListener('change', function() {
+      if(this.files && this.files.length > 0) {
+        fileNameText.textContent = this.files[0].name;
+        document.getElementById('file-label').style.borderColor = '#3182ce';
+      }
+    });
+
+    // 1. Handle Evidence Upload
+    document.getElementById('upload-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = document.getElementById('btn-upload');
+      btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Encrypting...';
+
+      try {
+        const res = await fetch('/api/evidence/upload', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            incidentType: document.getElementById('uploadType').value,
+            location: document.getElementById('uploadLocation').value
+          })
+        });
+        const data = await res.json();
+
+        if (res.ok) {
+          document.getElementById('upload-form').style.display = 'none';
+          document.getElementById('res-upload-id').textContent = data.evidenceId;
+          document.getElementById('res-upload-officer').innerHTML = `<i class="fa-solid fa-user-shield"></i> ${data.assignedTo}`;
+          document.getElementById('upload-success').style.display = 'block';
+        }
+      } catch (error) { alert('Upload failed.'); btn.textContent = 'Secure Upload'; }
+    });
+
+    // 2. Handle CCTV Registry
+    document.getElementById('cctv-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = document.getElementById('btn-cctv');
+      btn.textContent = 'Registering Node...';
+
+      try {
+        const res = await fetch('/api/evidence/register-cctv', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            businessName: document.getElementById('cctvName').value,
+            cameraCount: document.getElementById('cctvCount').value,
+            address: document.getElementById('cctvAddress').value
+          })
+        });
+        const data = await res.json();
+
+        if (res.ok) {
+          document.getElementById('cctv-form').style.display = 'none';
+          document.getElementById('res-cctv-id').textContent = data.nodeId;
+          document.getElementById('res-cctv-officer').innerHTML = `<i class="fa-solid fa-user-shield"></i> ${data.assignedTo}`;
+          document.getElementById('cctv-success').style.display = 'block';
+        }
+      } catch (error) { alert('Registration failed.'); btn.textContent = 'Register Node'; }
+    });
+  </script>
+</body>
+</html>

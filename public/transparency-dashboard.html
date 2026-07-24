@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Omnagar Police | Transparency Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <!-- Chart.js for Data Visualization -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  
+  <style>
+    body { font-family: 'Poppins', sans-serif; background: #f0f4f8; margin: 0; color: #2d3748; }
+    
+    .hero { background: linear-gradient(135deg, #1a365d 0%, #2b6cb0 100%); color: white; padding: 50px 20px 80px; text-align: center; }
+    .hero h1 { margin: 0; font-size: 32px; font-weight: 700; }
+    .hero p { margin: 10px 0 0 0; color: #90cdf4; font-size: 16px; }
+    
+    .container { max-width: 1100px; margin: -50px auto 50px; padding: 0 20px; }
+    
+    /* Stats Grid */
+    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 30px; }
+    .stat-card { background: white; padding: 25px 20px; border-radius: 12px; box-shadow: 0 10px 20px rgba(0,0,0,0.05); text-align: center; position: relative; z-index: 10; border-bottom: 4px solid #3182ce; }
+    .stat-card i { font-size: 30px; color: #a0aec0; margin-bottom: 10px; }
+    .stat-value { font-size: 28px; font-weight: 700; color: #1a202c; margin: 5px 0; }
+    .stat-label { font-size: 14px; color: #718096; font-weight: 600; text-transform: uppercase; }
+    
+    .main-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 30px; }
+    @media(max-width: 800px) { .main-grid { grid-template-columns: 1fr; } }
+    
+    .panel { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
+    .panel h2 { margin-top: 0; font-size: 20px; border-bottom: 2px solid #e2e8f0; padding-bottom: 15px; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+    
+    /* Notices List */
+    .notice-item { display: flex; justify-content: space-between; align-items: center; padding: 15px 0; border-bottom: 1px solid #edf2f7; }
+    .notice-item:last-child { border-bottom: none; }
+    .notice-type { font-size: 11px; font-weight: bold; text-transform: uppercase; padding: 4px 8px; border-radius: 4px; }
+    .type-tender { background: #ebf8ff; color: #2b6cb0; }
+    .type-recruitment { background: #f0fff4; color: #276749; }
+    .type-rti { background: #fffaf0; color: #975a16; }
+    .notice-title { font-weight: 600; font-size: 14px; margin-top: 5px; color: #2d3748; }
+    .notice-date { font-size: 12px; color: #a0aec0; }
+    .download-btn { background: #e2e8f0; color: #4a5568; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer; transition: 0.3s; }
+    .download-btn:hover { background: #cbd5e0; }
+  </style>
+</head>
+<body>
+
+  <div class="hero">
+    <h1><i class="fa-solid fa-chart-line"></i> OMNAGAR POLICE</h1>
+    <p>Public Transparency & Analytics Dashboard</p>
+  </div>
+
+  <div class="container">
+    
+    <!-- Top KPI Metrics -->
+    <div class="stats-grid">
+      <div class="stat-card" style="border-color: #38a169;">
+        <i class="fa-solid fa-stopwatch"></i>
+        <div class="stat-value" id="val-response">--</div>
+        <div class="stat-label">Avg Response Time</div>
+      </div>
+      <div class="stat-card" style="border-color: #e53e3e;">
+        <i class="fa-solid fa-folder-open"></i>
+        <div class="stat-value" id="val-active">--</div>
+        <div class="stat-label">Active FIR Cases</div>
+      </div>
+      <div class="stat-card" style="border-color: #3182ce;">
+        <i class="fa-solid fa-folder-closed"></i>
+        <div class="stat-value" id="val-resolved">--</div>
+        <div class="stat-label">Resolved This Month</div>
+      </div>
+      <div class="stat-card" style="border-color: #d69e2e;">
+        <i class="fa-solid fa-users"></i>
+        <div class="stat-value" id="val-mitra">--</div>
+        <div class="stat-label">Active Police Mitras</div>
+      </div>
+    </div>
+
+    <div class="main-grid">
+      <!-- Data Visualization Chart -->
+      <div class="panel">
+        <h2><i class="fa-solid fa-chart-pie" style="color: #3182ce;"></i> Incident Resolution Breakdown</h2>
+        <canvas id="resolutionChart" height="200"></canvas>
+      </div>
+
+      <!-- Public Notices List -->
+      <div class="panel">
+        <h2><i class="fa-solid fa-bullhorn" style="color: #c53030;"></i> Official Notices</h2>
+        <div id="notices-container">
+          <p style="text-align: center; color: #a0aec0;"><i class="fa-solid fa-spinner fa-spin"></i> Loading notices...</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    // Initialize the Chart.js Graph
+    const ctx = document.getElementById('resolutionChart').getContext('2d');
+    const resolutionChart = new Chart(ctx, {
+      type: 'doughnut',
+      data: {
+        labels: ['Resolved', 'Under Investigation', 'Pending Review'],
+        datasets: [{
+          data: [65, 25, 10],
+          backgroundColor: ['#38a169', '#3182ce', '#ecc94b'],
+          borderWidth: 0
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: { legend: { position: 'bottom' } }
+      }
+    });
+
+    // Fetch and populate backend data
+    async function loadDashboardData() {
+      try {
+        // Load Stats
+        const statRes = await fetch('/api/transparency/stats');
+        const stats = await statRes.json();
+        
+        document.getElementById('val-response').textContent = stats.avgResponseTime;
+        document.getElementById('val-active').textContent = stats.activeCases;
+        document.getElementById('val-resolved').textContent = stats.firResolvedThisMonth;
+        document.getElementById('val-mitra').textContent = stats.policeMitraVolunteers;
+
+        // Load Notices
+        const noticeRes = await fetch('/api/transparency/notices');
+        const notices = await noticeRes.json();
+        
+        const noticesContainer = document.getElementById('notices-container');
+        noticesContainer.innerHTML = '';
+        
+        notices.forEach(notice => {
+          let typeClass = '';
+          if (notice.type === 'Tender') typeClass = 'type-tender';
+          if (notice.type === 'Recruitment') typeClass = 'type-recruitment';
+          if (notice.type === 'RTI') typeClass = 'type-rti';
+
+          noticesContainer.innerHTML += `
+            <div class="notice-item">
+              <div>
+                <span class="notice-type ${typeClass}">${notice.type}</span>
+                <div class="notice-title">${notice.title}</div>
+                <div class="notice-date">${notice.date}</div>
+              </div>
+              <button class="download-btn"><i class="fa-solid fa-download"></i></button>
+            </div>
+          `;
+        });
+      } catch (error) {
+        console.error("Failed to load dashboard data.");
+      }
+    }
+
+    loadDashboardData();
+  </script>
+</body>
+</html>
