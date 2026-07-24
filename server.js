@@ -75,7 +75,7 @@ app.get('/api/hierarchy', (req, res) => {
   });
 });
 app.get('/central-dashboard.html', (req, res) => {
-    res.sendFile(path.join(__dirname, 'central-dashboard.html'));
+    res.sendFile(path.join(__dirname, 'public', 'city-dashboard.html'));
 });
 
 // Import and use the authentication routes
