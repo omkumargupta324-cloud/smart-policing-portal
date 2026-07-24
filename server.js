@@ -2,6 +2,8 @@ const express = require('express');
 const dotenv = require('dotenv');
 const cors = require('cors');
 const path = require('path');
+// This acts as a master key, allowing access to ALL HTML files in the public folder
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Load the secrets from the .env file
 dotenv.config();
@@ -73,9 +75,6 @@ app.get('/api/hierarchy', (req, res) => {
     message: "Omnagar Police Department structure retrieved successfully",
     data: departmentStructure
   });
-});
-app.get('/central-dashboard.html', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'city-dashboard.html'));
 });
 
 // Import and use the authentication routes
