@@ -195,5 +195,15 @@
       } catch (error) { alert('Registration failed.'); btn.textContent = 'Register Node'; }
     });
   </script>
+  <script>
+    function handleLogout() {
+        // Clear the token and login flag
+        localStorage.removeItem('token');
+        localStorage.removeItem('isLoggedIn');
+        
+        // Redirect back to the login page
+        window.location.href = '/index.html';
+    }
+</script>
 </body>
 </html>
