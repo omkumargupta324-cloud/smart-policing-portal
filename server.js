@@ -1,6 +1,7 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const cors = require('cors');
+const path = require('path');
 
 // Load the secrets from the .env file
 dotenv.config();
@@ -72,6 +73,9 @@ app.get('/api/hierarchy', (req, res) => {
     message: "Omnagar Police Department structure retrieved successfully",
     data: departmentStructure
   });
+});
+app.get('/central-dashboard.html', (req, res) => {
+    res.sendFile(path.join(__dirname, 'central-dashboard.html'));
 });
 
 // Import and use the authentication routes
