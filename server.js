@@ -2,8 +2,7 @@ const express = require('express');
 const dotenv = require('dotenv');
 const cors = require('cors');
 const path = require('path');
-// This acts as a master key, allowing access to ALL HTML files in the public folder
-app.use(express.static(path.join(__dirname, 'public')));
+
 
 // Load the secrets from the .env file
 dotenv.config();
@@ -19,7 +18,7 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 // Serve static frontend files from the 'public' folder
-app.use(express.static('public'));
+app.use(express.static(path.join(__dirname, 'public')));
 
 // ==========================================
 // MOCK DATABASE: Police Department Hierarchy
