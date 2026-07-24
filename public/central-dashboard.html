@@ -78,15 +78,19 @@
         }
     });
 </script>
-<script>
+  <script>
+    // This checks if you are logged in and shows the navigation bar
+    if (localStorage.getItem('isLoggedIn') === 'true') {
+        document.getElementById('secure-nav').style.display = 'block';
+    }
+
+    // This handles logging out cleanly
     function handleLogout() {
-        // Clear the token and login flag
         localStorage.removeItem('token');
         localStorage.removeItem('isLoggedIn');
-        
-        // Redirect back to the login page
         window.location.href = '/index.html';
     }
 </script>
+
 </body>
 </html>

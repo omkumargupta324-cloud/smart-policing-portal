@@ -169,8 +169,6 @@
   </style>
 </head>
 <body>
-  
-</div>
 
   <div class="login-container">
     <!-- Omnagar Police Shield Logo -->
@@ -200,13 +198,15 @@
       </div>
     </form>
   </div>
-<script>
+
+  <script>
     document.getElementById('login-form').addEventListener('submit', async (e) => {
       e.preventDefault(); // Stop the page from refreshing
 
       const badge = document.getElementById('badge').value;
       const password = document.getElementById('password').value;
       const errorMessage = document.getElementById('error-message');
+      errorMessage.style.display = 'none';
 
       try {
         // Send the login data to our backend API
@@ -219,8 +219,9 @@
         const data = await response.json();
 
         if (response.ok) {
-          // Success! Save the digital security ticket (JWT) in the browser
+          // Save token and login flag
           localStorage.setItem('token', data.token);
+          localStorage.setItem('isLoggedIn', 'true');
           
           // Role-Based Routing: Send them to their specific portal
           if (data.department === 'Traffic') {
