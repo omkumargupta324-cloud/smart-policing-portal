@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Omnagar Police | Traffic Challan Database</title>
+  <link rel="stylesheet" href="/style.css">
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #0f172a;
+      color: #e2e8f0;
+      margin: 0;
+      padding: 20px;
+    }
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #334155;
+    }
+    .header h1 {
+      margin: 0;
+      color: #93c5fd;
+    }
+    .back-btn {
+      background: #334155;
+      color: white;
+      text-decoration: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-weight: bold;
+      transition: background 0.3s;
+    }
+    .back-btn:hover {
+      background: #475569;
+    }
+    .table-container {
+      background: #1e293b;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+      overflow-x: auto;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+    th, td {
+      padding: 12px 15px;
+      border-bottom: 1px solid #334155;
+    }
+    th {
+      background-color: #0f172a;
+      color: #94a3b8;
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 13px;
+    }
+    tr:hover {
+      background-color: #2dd4bf1a;
+    }
+    .status-unpaid {
+      color: #fca5a5;
+      font-weight: bold;
+    }
+    .status-paid {
+      color: #86efac;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <h1>🚔 Traffic Challan Database</h1>
+    <a href="/traffic-dashboard.html" class="back-btn">← Back to Dashboard</a>
+  </div>
+
+  <div class="table-container">
+    <table>
+      <thead>
+        <tr>
+          <th>Vehicle Number</th>
+          <th>Violation Name</th>
+          <th>Fine Amount</th>
+          <th>Location</th>
+          <th>Status</th>
+          <th>Date</th>
+        </tr>
+      </thead>
+      <tbody id="challan-table-body">
+        <tr>
+          <td colspan="6" style="text-align: center; color: #94a3b8;">Loading database records...</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+    // Security check: Make sure they are logged in
+    if (localStorage.getItem('isLoggedIn') !== 'true') {
+      window.location.href = '/index.html';
+    }
+
+    // Fetch the data from the backend
+    async function fetchChallans() {
+      try {
+        const response = await fetch('/api/challans'); // We will ensure this endpoint exists in Step 3
+        const data = await response.json();
+        const tbody = document.getElementById('challan-table-body');
+        
+        tbody.innerHTML = ''; // Clear loading text
+
+        if (data.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="6" style="text-align: center;">No challans found in the database.</td></tr>';
+          return;
+        }
+
+        data.forEach(challan => {
+          // You can adjust these field names based on your actual MongoDB schema later
+          const statusClass = challan.status === 'Paid' ? 'status-paid' : 'status-unpaid';
+          const date = new Date(challan.createdAt || challan.date).toLocaleDateString();
+
+          const row = `
+            <tr>
+              <td style="font-weight: bold; color: #fff;">${challan.vehicleNumber || 'N/A'}</td>
+              <td>${challan.violation || 'N/A'}</td>
+              <td>₹${challan.fineAmount || 0}</td>
+              <td>${challan.location || 'N/A'}</td>
+              <td class="${statusClass}">${challan.status || 'Pending'}</td>
+              <td>${date}</td>
+            </tr>
+          `;
+          tbody.innerHTML += row;
+        });
+      } catch (error) {
+        console.error('Error fetching challans:', error);
+        document.getElementById('challan-table-body').innerHTML = 
+          '<tr><td colspan="6" style="text-align: center; color: #fca5a5;">Failed to connect to database.</td></tr>';
+      }
+    }
+
+    fetchChallans();
+  </script>
+</body>
+</html>

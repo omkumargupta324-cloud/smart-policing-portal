@@ -2,7 +2,7 @@ const express = require('express');
 const dotenv = require('dotenv');
 const cors = require('cors');
 const path = require('path');
-
+const mongoose = require('mongoose'); // Added mongoose to directly fetch collections
 
 // Load the secrets from the .env file
 dotenv.config();
@@ -115,6 +115,25 @@ app.use('/api/evidence', evidenceRoutes);
 // Import and use the transparency and stats routes
 const transparencyRoutes = require('./routes/transparencyRoutes');
 app.use('/api/transparency', transparencyRoutes);
+
+// ==========================================
+// NEW: TRAFFIC CHALLAN DATABASE ROUTE
+// ==========================================
+app.get('/api/challans', async (req, res) => {
+  try {
+    // We use the raw mongoose connection so it securely grabs the data 
+    // without needing to import specific model files.
+    const db = mongoose.connection.db;
+    
+    // Fetch all documents from your challans collection, sorting by newest first
+    const challans = await db.collection('challans').find({}).sort({ _id: -1 }).toArray();
+    
+    res.json(challans);
+  } catch (error) {
+    console.error("Error fetching challans:", error);
+    res.status(500).json({ error: "Failed to fetch challan data from the database" });
+  }
+});
 
 // ==========================================
 // SERVER INITIALIZATION
