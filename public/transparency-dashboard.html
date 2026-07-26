@@ -71,22 +71,22 @@
       <div class="stat-card" style="border-color: #38a169;">
         <i class="fa-solid fa-stopwatch"></i>
         <div class="stat-value" id="val-response">--</div>
-        <div class="stat-label">Avg Response Time</div>
+        <div class="stat-label">System Uptime</div>
       </div>
       <div class="stat-card" style="border-color: #e53e3e;">
         <i class="fa-solid fa-folder-open"></i>
         <div class="stat-value" id="val-active">--</div>
-        <div class="stat-label">Active FIR Cases</div>
+        <div class="stat-label">Active FIRs & Complaints</div>
       </div>
       <div class="stat-card" style="border-color: #3182ce;">
         <i class="fa-solid fa-folder-closed"></i>
         <div class="stat-value" id="val-resolved">--</div>
-        <div class="stat-label">Resolved This Month</div>
+        <div class="stat-label">Total Resolved</div>
       </div>
       <div class="stat-card" style="border-color: #d69e2e;">
-        <i class="fa-solid fa-users"></i>
+        <i class="fa-solid fa-car-burst"></i>
         <div class="stat-value" id="val-mitra">--</div>
-        <div class="stat-label">Active Police Mitras</div>
+        <div class="stat-label">Challans Issued</div>
       </div>
     </div>
 
@@ -109,75 +109,84 @@
   </div>
 
   <script>
-    // Initialize the Chart.js Graph
-    const ctx = document.getElementById('resolutionChart').getContext('2d');
-    const resolutionChart = new Chart(ctx, {
-      type: 'doughnut',
-      data: {
-        labels: ['Resolved', 'Under Investigation', 'Pending Review'],
-        datasets: [{
-          data: [65, 25, 10],
-          backgroundColor: ['#38a169', '#3182ce', '#ecc94b'],
-          borderWidth: 0
-        }]
-      },
-      options: {
-        responsive: true,
-        plugins: { legend: { position: 'bottom' } }
-      }
-    });
-
-    // Fetch and populate backend data
+    // Fetch and populate real backend data
     async function loadDashboardData() {
       try {
-        // Load Stats
+        // Load Real Stats from MongoDB
         const statRes = await fetch('/api/transparency/stats');
         const stats = await statRes.json();
         
         document.getElementById('val-response').textContent = stats.avgResponseTime;
         document.getElementById('val-active').textContent = stats.activeCases;
-        document.getElementById('val-resolved').textContent = stats.firResolvedThisMonth;
-        document.getElementById('val-mitra').textContent = stats.policeMitraVolunteers;
+        document.getElementById('val-resolved').textContent = stats.resolvedCases;
+        document.getElementById('val-mitra').textContent = stats.challansCount;
 
-        // Load Notices
+        // Render Real Chart Data
+        const ctx = document.getElementById('resolutionChart').getContext('2d');
+        new Chart(ctx, {
+          type: 'doughnut',
+          data: {
+            labels: ['Resolved', 'Under Investigation / In Progress', 'Pending Initial Review'],
+            datasets: [{
+              data: [stats.chartData.resolved, stats.chartData.investigating, stats.chartData.pending],
+              backgroundColor: ['#38a169', '#3182ce', '#ecc94b'],
+              borderWidth: 0
+            }]
+          },
+          options: {
+            responsive: true,
+            plugins: { legend: { position: 'bottom' } }
+          }
+        });
+
+        // Load Real Notices
         const noticeRes = await fetch('/api/transparency/notices');
         const notices = await noticeRes.json();
         
         const noticesContainer = document.getElementById('notices-container');
         noticesContainer.innerHTML = '';
         
-        notices.forEach(notice => {
-          let typeClass = '';
-          if (notice.type === 'Tender') typeClass = 'type-tender';
-          if (notice.type === 'Recruitment') typeClass = 'type-recruitment';
-          if (notice.type === 'RTI') typeClass = 'type-rti';
+        if (!notices || notices.length === 0) {
+          noticesContainer.innerHTML = '<p style="text-align: center; color: #a0aec0;">No official notices currently.</p>';
+        } else {
+          notices.forEach(notice => {
+            let typeClass = 'type-rti'; // Default fallback
+            if (notice.type === 'Tender') typeClass = 'type-tender';
+            if (notice.type === 'Recruitment') typeClass = 'type-recruitment';
 
-          noticesContainer.innerHTML += `
-            <div class="notice-item">
-              <div>
-                <span class="notice-type ${typeClass}">${notice.type}</span>
-                <div class="notice-title">${notice.title}</div>
-                <div class="notice-date">${notice.date}</div>
+            noticesContainer.innerHTML += `
+              <div class="notice-item">
+                <div>
+                  <span class="notice-type ${typeClass}">${notice.type || 'Notice'}</span>
+                  <div class="notice-title">${notice.title}</div>
+                  <div class="notice-date">${notice.date || new Date().toLocaleDateString()}</div>
+                </div>
+                <button class="download-btn"><i class="fa-solid fa-download"></i></button>
               </div>
-              <button class="download-btn"><i class="fa-solid fa-download"></i></button>
-            </div>
-          `;
-        });
+            `;
+          });
+        }
       } catch (error) {
-        console.error("Failed to load dashboard data.");
+        console.error("Failed to load dashboard data.", error);
       }
     }
 
     loadDashboardData();
-  </script><script>
+  </script>
+  <script>
+    // Check if the user is authenticated
+    window.addEventListener('DOMContentLoaded', () => {
+        const isLoggedIn = localStorage.getItem('isLoggedIn') || sessionStorage.getItem('isLoggedIn');
+        if (isLoggedIn === 'true') {
+            document.getElementById('secure-nav').style.display = 'block';
+        }
+    });
+
     function handleLogout() {
-        // Clear the token and login flag
         localStorage.removeItem('token');
         localStorage.removeItem('isLoggedIn');
-        
-        // Redirect back to the login page
         window.location.href = '/index.html';
     }
-</script>
+  </script>
 </body>
 </html>
