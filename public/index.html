@@ -174,7 +174,7 @@
         color: #a0aec0;
         display: flex;
         flex-direction: column;
-        gap: 10px;
+        gap: 12px;
         align-items: center;
     }
     .public-btn {
@@ -186,8 +186,28 @@
         color: #90cdf4 !important;
         text-decoration: underline;
     }
+    
+    /* New SOS Button Styling */
+    .sos-btn {
+        color: #fc8181 !important;
+        font-weight: bold;
+        text-decoration: none;
+        background: rgba(252, 129, 129, 0.1);
+        padding: 8px 16px;
+        border-radius: 6px;
+        border: 1px solid rgba(252, 129, 129, 0.3);
+        transition: all 0.3s ease;
+        margin-top: 5px;
+    }
+    .sos-btn:hover {
+        color: #fff !important;
+        background: rgba(229, 62, 62, 0.8);
+        border-color: #e53e3e;
+        box-shadow: 0 0 10px rgba(229, 62, 62, 0.5);
+    }
+
     .security-notice {
-        margin-top: 15px;
+        margin-top: 25px;
         font-size: 11px;
         color: #a0aec0;
         font-style: italic;
@@ -246,6 +266,7 @@
 
     <div class="extra-links">
       <a href="/citizen-complaint.html" class="public-btn">📢 File Public Complaint / FIR</a>
+      <a href="/sos-panic.html" class="sos-btn">🚨 EMERGENCY SOS / PANIC</a>
     </div>
 
     <div class="security-notice">
@@ -309,7 +330,7 @@
       }
     });
 
-    // FORM 2: Traffic Police Login Handler (Directs to Traffic Dashboard)
+    // FORM 2: Traffic Police Login Handler
     document.getElementById('traffic-login-form').addEventListener('submit', async (e) => {
       e.preventDefault();
       const badge = document.getElementById('traffic-badge').value;
@@ -329,7 +350,6 @@
         if (response.ok) {
           localStorage.setItem('token', data.token);
           localStorage.setItem('isLoggedIn', 'true');
-          // Directly routes to traffic dashboard
           window.location.href = '/traffic-dashboard.html';
         } else {
           errorDiv.textContent = data.message || 'Invalid credentials.';
