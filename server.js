@@ -2,7 +2,9 @@ const express = require('express');
 const dotenv = require('dotenv');
 const cors = require('cors');
 const path = require('path');
-const mongoose = require('mongoose'); // Added mongoose to directly fetch collections
+const mongoose = require('mongoose'); 
+const http = require('http'); // NEW: Required for WebSockets
+const { Server } = require('socket.io'); // NEW: Real-time networking
 
 // Load the secrets from the .env file
 dotenv.config();
@@ -13,6 +15,10 @@ startEscalationEngine();
 
 // Initialize the Express application
 const app = express();
+
+// NEW: Wrap the Express app with an HTTP server to support WebSockets
+const server = http.createServer(app);
+const io = new Server(server, { cors: { origin: "*" } });
 
 // Middleware so our server understands JSON data
 app.use(express.json());
@@ -25,7 +31,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 // ==========================================
 const departmentStructure = {
   jurisdiction: "Omnagar",
-  chiefCommandingOfficer: "SSP, Omnagar", // Apex Command
+  chiefCommandingOfficer: "SSP, Omnagar", 
   divisions: {
     lawAndOrderWing: {
       commandingOfficer: "ASP (Law & Order)",
@@ -63,12 +69,10 @@ const departmentStructure = {
 // API ROUTES
 // ==========================================
 
-// A simple test route to make sure it works
 app.get('/', (req, res) => {
   res.send('Smart Policing API is online!');
 });
 
-// Fetch the Registration Hierarchy
 app.get('/api/hierarchy', (req, res) => {
   res.json({
     message: "Omnagar Police Department structure retrieved successfully",
@@ -76,58 +80,40 @@ app.get('/api/hierarchy', (req, res) => {
   });
 });
 
-// Import and use the authentication routes
 const authRoutes = require('./routes/authRoutes');
 app.use('/api/auth', authRoutes);
-// Import and use the traffic module routes
 const trafficRoutes = require('./routes/trafficRoutes');
 app.use('/api/traffic', trafficRoutes);
-// Import and use the city police module routes
 const firRoutes = require('./routes/firRoutes');
 app.use('/api/fir', firRoutes);
-// Import and use the public complaint routes
 const complaintRoutes = require('./routes/complaintRoutes');
 app.use('/api/complaints', complaintRoutes);
-// Import and use the public challan payment routes
 const publicChallanRoutes = require('./routes/publicChallanRoutes');
 app.use('/api/public-challans', publicChallanRoutes);
-// Import and use the emergency SOS routes
 const emergencyRoutes = require('./routes/emergencyRoutes');
 app.use('/api/emergency', emergencyRoutes);
-// Import and use the live public updates routes
 const publicUpdatesRoutes = require('./routes/publicUpdatesRoutes');
 app.use('/api/updates', publicUpdatesRoutes);
-// Import and use the lost & found routes
 const lostFoundRoutes = require('./routes/lostFoundRoutes');
 app.use('/api/lost-found', lostFoundRoutes);
-// Import and use the public services and certificates routes
 const servicesRoutes = require('./routes/servicesRoutes');
 app.use('/api/services', servicesRoutes);
-// Import and use the awareness resources routes
 const resourcesRoutes = require('./routes/resourcesRoutes');
 app.use('/api/resources', resourcesRoutes);
-// Import and use the community connect routes
 const communityRoutes = require('./routes/communityRoutes');
 app.use('/api/community', communityRoutes);
-// Import and use the evidence and CCTV routes
 const evidenceRoutes = require('./routes/evidenceRoutes');
 app.use('/api/evidence', evidenceRoutes);
-// Import and use the transparency and stats routes
 const transparencyRoutes = require('./routes/transparencyRoutes');
 app.use('/api/transparency', transparencyRoutes);
 
 // ==========================================
-// NEW: TRAFFIC CHALLAN DATABASE ROUTE
+// TRAFFIC CHALLAN DATABASE ROUTE
 // ==========================================
 app.get('/api/challans', async (req, res) => {
   try {
-    // We use the raw mongoose connection so it securely grabs the data 
-    // without needing to import specific model files.
     const db = mongoose.connection.db;
-    
-    // Fetch all documents from your challans collection, sorting by newest first
     const challans = await db.collection('challans').find({}).sort({ _id: -1 }).toArray();
-    
     res.json(challans);
   } catch (error) {
     console.error("Error fetching challans:", error);
@@ -136,14 +122,34 @@ app.get('/api/challans', async (req, res) => {
 });
 
 // ==========================================
+// NEW: REAL-TIME SOS WEBSOCKET HUB
+// ==========================================
+io.on('connection', (socket) => {
+  console.log(`📱 Device connected to Emergency Network: ${socket.id}`);
+  
+  // Listen for citizens triggering the SOS button
+  socket.on('trigger-sos', (alertData) => {
+    console.log('\n🚨 URGENT: SOS RECEIVED! 🚨');
+    console.log(alertData);
+    
+    // Instantly blast this alert to all connected police dashboards
+    io.emit('sos-alert', alertData);
+  });
+
+  socket.on('disconnect', () => {
+    console.log(`Device disconnected: ${socket.id}`);
+  });
+});
+
+// ==========================================
 // SERVER INITIALIZATION
 // ==========================================
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
+// NOTE: Changed from app.listen to server.listen to support WebSockets
+server.listen(PORT, () => {
   console.log(`\n========================================`);
   console.log(`🚀 SERVER IS LIVE ON PORT ${PORT}`);
   console.log(`🚓 JURISDICTION: Omnagar`);
-  console.log(`👉 View API Status: http://localhost:${PORT}`);
-  console.log(`👉 View Hierarchy:  http://localhost:${PORT}/api/hierarchy`);
+  console.log(`📡 WEBSOCKETS: Active and Listening`);
   console.log(`========================================\n`);
 });

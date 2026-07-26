@@ -101,6 +101,33 @@
         window.location.href = '/index.html';
     }
 </script>
+<!-- Socket.io Library -->
+<script src="/socket.io/socket.io.js"></script>
+
+<script>
+  const socket = io();
+
+  // Listen for live SOS broadcasts
+  socket.on('sos-alert', (data) => {
+    // Play alert sound or pop alert box
+    const alertBox = document.createElement('div');
+    alertBox.style.cssText = `
+      position: fixed; top: 20px; right: 20px; background: #dc2626; color: white;
+      padding: 20px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+      z-index: 99999; border: 2px solid #fca5a5; max-width: 350px; font-family: sans-serif;
+      animation: pulse 1s infinite alternate;
+    `;
+    alertBox.innerHTML = `
+      <h3 style="margin:0 0 5px 0; font-size: 18px;">🚨 CRITICAL EMERGENCY SOS!</h3>
+      <p style="margin:3px 0;"><strong>Citizen:</strong> ${data.name}</p>
+      <p style="margin:3px 0;"><strong>Phone:</strong> ${data.phone}</p>
+      <p style="margin:3px 0;"><strong>GPS:</strong> ${data.location}</p>
+      <p style="margin:3px 0; font-size:11px; opacity:0.8;">Time: ${data.timestamp}</p>
+      <button onclick="this.parentElement.remove()" style="margin-top:10px; background:white; color:black; border:none; padding:5px 10px; border-radius:4px; font-weight:bold; cursor:pointer;">Acknowledge & Dismiss</button>
+    `;
+    document.body.appendChild(alertBox);
+  });
+</script>
 
 </body>
 </html>
