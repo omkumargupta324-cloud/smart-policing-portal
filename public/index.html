@@ -212,21 +212,21 @@
 
     <!-- Tab Selector -->
     <div class="tab-container">
-      <button type="button" class="tab-btn active" onclick="switchTab('general')">Command / Officer</button>
+      <button type="button" class="tab-btn active" onclick="switchTab('general')">City/Urban Police</button>
       <button type="button" class="tab-btn" onclick="switchTab('traffic')">Traffic Police</button>
     </div>
 
-    <!-- FORM 1: Command & Officer Login -->
+    <!-- FORM 1: City/Urban Police Login -->
     <form id="general-login-form" class="login-form active">
       <div class="form-group">
-        <label for="badge">Officer Badge Number</label>
+        <label for="badge">City Police Badge Number</label>
         <input type="text" id="badge" required placeholder="e.g. OFF-101">
       </div>
       <div class="form-group">
         <label for="password">Password</label>
         <input type="password" id="password" required placeholder="••••••••">
       </div>
-      <button type="submit" class="submit-btn">Login to Command Portal</button>
+      <button type="submit" class="submit-btn">Login to City Portal</button>
       <div id="general-error" class="error-msg">Invalid credentials.</div>
     </form>
 
@@ -271,7 +271,7 @@
       }
     }
 
-    // FORM 1: General/Command Login Handler
+    // FORM 1: City/Urban Police Login Handler
     document.getElementById('general-login-form').addEventListener('submit', async (e) => {
       e.preventDefault();
       const badge = document.getElementById('badge').value;
