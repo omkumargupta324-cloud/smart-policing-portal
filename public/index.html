@@ -3,30 +3,30 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Omnagar Police | Secure Login</title>
+  <title>Omnagar Police | Unified Portal</title>
   
   <!-- Global Mark 2 Background Style -->
   <link rel="stylesheet" href="/style.css">
 
   <style>
-    /* Premium Police UI Base Styling */
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
+      min-height: 100vh;
       margin: 0;
       color: #e2e8f0; 
+      padding: 20px 0;
+      box-sizing: border-box;
     }
 
-    /* Refined, Integrated Login Container */
     .login-container {
-      background: rgba(16, 21, 32, 0.85); 
+      background: rgba(16, 21, 32, 0.88); 
       backdrop-filter: blur(8px);
-      padding: 50px 40px;
+      padding: 40px 35px;
       border-radius: 12px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.4), 
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5), 
                   0 0 15px rgba(43, 108, 176, 0.2); 
       width: 100%;
       max-width: 440px;
@@ -34,14 +34,13 @@
       border: 1px solid rgba(255, 255, 255, 0.12); 
     }
 
-    /* Polished Police Shield Icon Integration */
     .portal-logo {
-      width: 80px;
-      height: 80px;
-      margin-bottom: 20px;
+      width: 70px;
+      height: 70px;
+      margin: 0 auto 15px;
       background: radial-gradient(circle, #2b6cb0 0%, #1a365d 100%);
       border-radius: 50%;
-      display: inline-flex;
+      display: flex;
       justify-content: center;
       align-items: center;
       border: 3px solid rgba(255, 255, 255, 0.2);
@@ -51,47 +50,68 @@
     
     .portal-logo::after {
       content: 'OP';
-      font-size: 32px;
+      font-size: 28px;
       font-weight: 800;
       color: #fff;
       position: absolute;
     }
-    .portal-logo::before {
-        content: '';
-        width: 60px; height: 70px;
-        position: absolute;
-        border: 2px solid #fff;
-        border-radius: 5px 5px 35px 35px;
-        transform: rotate(-15deg);
-        opacity: 0.2;
-    }
 
-    /* Official Omnagar Police Header */
     h2 {
       color: #fff;
-      font-size: 28px;
-      margin-bottom: 5px;
+      font-size: 24px;
+      margin: 0 0 5px 0;
       font-weight: 700;
       letter-spacing: -0.5px;
       text-transform: uppercase;
     }
     .subtitle {
         color: #a0aec0;
-        font-size: 14px;
-        margin-bottom: 35px;
+        font-size: 13px;
+        margin-bottom: 25px;
         font-style: italic;
     }
 
+    /* Tab Switcher */
+    .tab-container {
+      display: flex;
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 8px;
+      padding: 4px;
+      margin-bottom: 25px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .tab-btn {
+      flex: 1;
+      padding: 10px 5px;
+      border: none;
+      background: transparent;
+      color: #a0aec0;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      border-radius: 6px;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      box-shadow: none;
+      margin-top: 0;
+    }
+    .tab-btn.active {
+      background: linear-gradient(135deg, #2c5282 0%, #1a365d 100%);
+      color: #fff;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    }
+
     .form-group {
-      margin-bottom: 20px;
+      margin-bottom: 18px;
       text-align: left;
     }
     label {
       display: block;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
       font-weight: 600;
       color: #a0aec0;
-      font-size: 14px;
+      font-size: 13px;
     }
     input {
       width: 100%;
@@ -101,7 +121,7 @@
       box-sizing: border-box;
       background-color: #1a202c; 
       color: #e2e8f0;
-      font-size: 16px;
+      font-size: 15px;
       transition: border-color 0.2s, box-shadow 0.2s;
     }
     input::placeholder {
@@ -113,29 +133,41 @@
         box-shadow: 0 0 8px rgba(43, 108, 176, 0.3);
     }
 
-    /* Polished, Sapphire Blue-Indigo Gradient Button */
-    button {
+    .submit-btn {
       width: 100%;
-      padding: 14px;
+      padding: 13px;
       background: linear-gradient(135deg, #2c5282 0%, #1a365d 100%);
       color: white;
       border: 1px solid rgba(255, 255, 255, 0.15);
       border-radius: 6px;
-      font-size: 17px;
+      font-size: 15px;
       font-weight: 700;
       cursor: pointer;
-      margin-top: 15px;
+      margin-top: 10px;
       text-transform: uppercase;
       letter-spacing: 1px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.2);
       transition: background 0.3s, box-shadow 0.3s;
     }
-    button:hover {
+    .submit-btn:hover {
       background: linear-gradient(135deg, #3182ce 0%, #2c5282 100%);
       box-shadow: 0 6px 18px rgba(43, 108, 176, 0.3);
     }
 
-    /* Public Access Quick Links */
+    .traffic-btn {
+      background: linear-gradient(135deg, #c53030 0%, #742a2a 100%);
+    }
+    .traffic-btn:hover {
+      background: linear-gradient(135deg, #e53e3e 0%, #c53030 100%);
+    }
+
+    .login-form {
+      display: none;
+    }
+    .login-form.active {
+      display: block;
+    }
+
     .extra-links {
         margin-top: 25px;
         font-size: 13px;
@@ -145,38 +177,27 @@
         gap: 10px;
         align-items: center;
     }
-    .public-links-row {
-        display: flex;
-        justify-content: space-around;
-        width: 100%;
-    }
-    .extra-links a {
-        color: #a0aec0;
-        text-decoration: none;
-    }
-    .extra-links a:hover {
-        color: #fff;
-        text-decoration: underline;
-    }
     .public-btn {
         color: #63b3ed !important;
         font-weight: bold;
+        text-decoration: none;
     }
     .public-btn:hover {
         color: #90cdf4 !important;
+        text-decoration: underline;
     }
     .security-notice {
-        margin-top: 20px;
+        margin-top: 15px;
         font-size: 11px;
         color: #a0aec0;
         font-style: italic;
     }
 
-    #error-message {
+    .error-msg {
       color: #fc8181;
       text-align: center;
       margin-top: 15px;
-      font-size: 15px;
+      font-size: 14px;
       display: none;
       font-weight: 600;
     }
@@ -185,44 +206,78 @@
 <body>
 
   <div class="login-container">
-    <!-- Omnagar Police Shield Logo -->
     <div class="portal-logo"></div>
-    
     <h2>Omnagar Police</h2>
     <div class="subtitle">Secure Unified Portal</div>
 
-    <form id="login-form">
+    <!-- Tab Selector -->
+    <div class="tab-container">
+      <button type="button" class="tab-btn active" onclick="switchTab('general')">Command / Officer</button>
+      <button type="button" class="tab-btn" onclick="switchTab('traffic')">Traffic Police</button>
+    </div>
+
+    <!-- FORM 1: Command & Officer Login -->
+    <form id="general-login-form" class="login-form active">
       <div class="form-group">
-        <label for="badge">Badge Number</label>
-        <input type="text" id="badge" required placeholder="e.g. OFF-101 / TRF-101">
+        <label for="badge">Officer Badge Number</label>
+        <input type="text" id="badge" required placeholder="e.g. OFF-101">
       </div>
       <div class="form-group">
         <label for="password">Password</label>
         <input type="password" id="password" required placeholder="••••••••">
       </div>
-      <button type="submit">Authenticate</button>
-      <div id="error-message">Invalid credentials. Please contact Command.</div>
-      
-      <div class="extra-links">
-        <div class="public-links-row">
-          <a href="/citizen-complaint.html" class="public-btn">📢 File Complaint / FIR</a>
-        </div>
-        <a href="#">Forgot Password?</a>
-      </div>
-      <div class="security-notice">
-        System monitored. Unauthorized usage strictly prohibited.
-      </div>
+      <button type="submit" class="submit-btn">Login to Command Portal</button>
+      <div id="general-error" class="error-msg">Invalid credentials.</div>
     </form>
+
+    <!-- FORM 2: Traffic Police Login -->
+    <form id="traffic-login-form" class="login-form">
+      <div class="form-group">
+        <label for="traffic-badge">Traffic Badge / Constable ID</label>
+        <input type="text" id="traffic-badge" required placeholder="e.g. TRF-101">
+      </div>
+      <div class="form-group">
+        <label for="traffic-password">Password</label>
+        <input type="password" id="traffic-password" required placeholder="••••••••">
+      </div>
+      <button type="submit" class="submit-btn traffic-btn">Login to Traffic Dashboard</button>
+      <div id="traffic-error" class="error-msg">Invalid credentials.</div>
+    </form>
+
+    <div class="extra-links">
+      <a href="/citizen-complaint.html" class="public-btn">📢 File Public Complaint / FIR</a>
+    </div>
+
+    <div class="security-notice">
+      System monitored. Unauthorized usage strictly prohibited.
+    </div>
   </div>
 
   <script>
-    document.getElementById('login-form').addEventListener('submit', async (e) => {
-      e.preventDefault();
+    // Tab Switcher Logic
+    function switchTab(type) {
+      const tabs = document.querySelectorAll('.tab-btn');
+      const forms = document.querySelectorAll('.login-form');
+      
+      tabs.forEach(tab => tab.classList.remove('active'));
+      forms.forEach(form => form.classList.remove('active'));
 
+      if (type === 'general') {
+        tabs[0].classList.add('active');
+        document.getElementById('general-login-form').classList.add('active');
+      } else {
+        tabs[1].classList.add('active');
+        document.getElementById('traffic-login-form').classList.add('active');
+      }
+    }
+
+    // FORM 1: General/Command Login Handler
+    document.getElementById('general-login-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
       const badge = document.getElementById('badge').value;
       const password = document.getElementById('password').value;
-      const errorMessage = document.getElementById('error-message');
-      errorMessage.style.display = 'none';
+      const errorDiv = document.getElementById('general-error');
+      errorDiv.style.display = 'none';
 
       try {
         const response = await fetch('/api/auth/login', {
@@ -236,26 +291,53 @@
         if (response.ok) {
           localStorage.setItem('token', data.token);
           localStorage.setItem('isLoggedIn', 'true');
-          
-          // Department & Role Routing
-          if (data.department === 'Traffic') {
-            window.location.href = '/traffic-dashboard.html';
-          } else if (data.department === 'City') {
+
+          if (data.department === 'City') {
             window.location.href = '/city-dashboard.html';
           } else if (data.department === 'Officer' || data.role === 'Officer' || data.role === 'Constable') {
-            // Direct Officers and Constables to the Officer Portal
             window.location.href = '/officer-dashboard.html';
           } else {
-            // Central Command default
             window.location.href = '/central-dashboard.html';
           }
         } else {
-          errorMessage.textContent = data.message || 'Invalid credentials.';
-          errorMessage.style.display = 'block';
+          errorDiv.textContent = data.message || 'Invalid credentials.';
+          errorDiv.style.display = 'block';
         }
-      } catch (error) {
-        errorMessage.textContent = 'Server connection failed. Please contact Command.';
-        errorMessage.style.display = 'block';
+      } catch (err) {
+        errorDiv.textContent = 'Server connection failed.';
+        errorDiv.style.display = 'block';
+      }
+    });
+
+    // FORM 2: Traffic Police Login Handler (Directs to Traffic Dashboard)
+    document.getElementById('traffic-login-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const badge = document.getElementById('traffic-badge').value;
+      const password = document.getElementById('traffic-password').value;
+      const errorDiv = document.getElementById('traffic-error');
+      errorDiv.style.display = 'none';
+
+      try {
+        const response = await fetch('/api/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ badgeNumber: badge, password })
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          localStorage.setItem('token', data.token);
+          localStorage.setItem('isLoggedIn', 'true');
+          // Directly routes to traffic dashboard
+          window.location.href = '/traffic-dashboard.html';
+        } else {
+          errorDiv.textContent = data.message || 'Invalid credentials.';
+          errorDiv.style.display = 'block';
+        }
+      } catch (err) {
+        errorDiv.textContent = 'Server connection failed.';
+        errorDiv.style.display = 'block';
       }
     });
   </script>
