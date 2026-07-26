@@ -7,22 +7,24 @@
   <!-- Importing a modern font and professional icons -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/style.css">
   
   <style>
     body {
       font-family: 'Poppins', sans-serif;
-      background: #f0f4f8;
       margin: 0;
       color: #2d3748;
     }
 
     /* Dynamic Hero Banner */
     .hero {
-      background: linear-gradient(135deg, #1a365d 0%, #2b6cb0 100%);
+      background: rgba(16, 21, 32, 0.85);
       color: white;
-      padding: 60px 20px 120px;
+      padding: 50px 20px 100px;
       text-align: center;
       position: relative;
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     }
     .hero h1 { margin: 0; font-size: 32px; font-weight: 700; letter-spacing: 1px; }
     .hero p { margin: 10px 0 0 0; color: #90cdf4; font-size: 16px; font-weight: 300; }
@@ -31,13 +33,15 @@
     /* Elevated Form Container */
     .container {
       max-width: 650px;
-      margin: -70px auto 50px;
-      background: white;
+      margin: -60px auto 50px;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
       padding: 45px;
       border-radius: 16px;
-      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      box-shadow: 0 15px 35px rgba(0,0,0,0.3);
       position: relative;
       z-index: 10;
+      border: 1px solid rgba(255, 255, 255, 0.2);
     }
 
     .form-header {
@@ -46,6 +50,65 @@
     }
     .form-header h2 { margin: 0; color: #1a202c; font-size: 22px; }
     .form-header p { color: #718096; font-size: 14px; margin-top: 5px; }
+
+    /* Anonymous Switch Container */
+    .anonymous-box {
+      background: #edf2f7;
+      border: 2px dashed #cbd5e0;
+      padding: 15px 20px;
+      border-radius: 10px;
+      margin-bottom: 25px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .anonymous-box label {
+      margin: 0;
+      font-weight: 700;
+      color: #2d3748;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+    }
+
+    /* Modern Toggle Switch */
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 50px;
+      height: 26px;
+    }
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: #cbd5e0;
+      transition: .4s;
+      border-radius: 34px;
+    }
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 18px;
+      width: 18px;
+      left: 4px;
+      bottom: 4px;
+      background-color: white;
+      transition: .4s;
+      border-radius: 50%;
+    }
+    input:checked + .slider {
+      background-color: #e53e3e;
+    }
+    input:checked + .slider:before {
+      transform: translateX(24px);
+    }
 
     .form-group { margin-bottom: 24px; }
     label { display: block; margin-bottom: 8px; font-weight: 600; color: #4a5568; font-size: 14px; }
@@ -159,21 +222,9 @@
     }
     .officer-details i { margin-right: 8px; }
   </style>
-  <link rel="stylesheet" href="/style.css">
 </head>
 <body>
-    <!-- Secure Navigation Wrapper (Hidden by default) -->
-<div id="secure-nav" style="display: none;">
-    <nav style="background-color: #1a1e29; padding: 15px; border-bottom: 2px solid #333; display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;">
-        <a href="/central-dashboard.html" style="color: #4da6ff; text-decoration: none; font-weight: bold; padding: 5px;">Central Dashboard</a>
-        <a href="/officer-dashboard.html" style="color: white; text-decoration: none; font-weight: bold; padding: 5px;">Officer Portal</a>
-        <a href="/traffic-dashboard.html" style="color: white; text-decoration: none; font-weight: bold; padding: 5px;">Traffic Control</a>
-        <a href="/transparency-dashboard.html" style="color: white; text-decoration: none; font-weight: bold; padding: 5px;">Transparency Stats</a>
-        <a href="/citizen-complaint.html" style="color: white; text-decoration: none; font-weight: bold; padding: 5px;">Complaints</a>
-        <a href="/evidence-portal.html" style="color: white; text-decoration: none; font-weight: bold; padding: 5px;">Evidence Portal</a>
-        <a href="/services-portal.html" style="color: white; text-decoration: none; font-weight: bold; padding: 5px;">Services</a>
-    </nav>
-</div>
+
   <!-- Dynamic Header Banner -->
   <div class="hero">
     <i class="fa-solid fa-shield-halved"></i>
@@ -188,8 +239,20 @@
         <p>Your data is securely transmitted and encrypted.</p>
       </div>
 
+      <!-- Stay Anonymous Toggle -->
+      <div class="anonymous-box">
+        <label for="anonymousToggle">
+          <i class="fa-solid fa-user-ninja" style="color: #e53e3e;"></i>
+          <span>Stay Anonymous</span>
+        </label>
+        <label class="switch">
+          <input type="checkbox" id="anonymousToggle">
+          <span class="slider"></span>
+        </label>
+      </div>
+
       <form id="complaint-form">
-        <div class="form-group">
+        <div class="form-group" id="nameGroup">
           <label>Full Name</label>
           <div class="input-with-icon">
             <i class="fa-regular fa-user"></i>
@@ -197,7 +260,7 @@
           </div>
         </div>
 
-        <div class="form-group">
+        <div class="form-group" id="phoneGroup">
           <label>Mobile Number (For SMS Updates)</label>
           <div class="input-with-icon">
             <i class="fa-solid fa-mobile-screen"></i>
@@ -237,7 +300,6 @@
       
       <div class="tracking-id" id="display-tracking"></div>
       
-      <!-- Explicitly using the requested terminology -->
       <div class="officer-details" id="display-officer">
         <i class="fa-solid fa-user-shield"></i> Investigating Officer: Pending Assignment
       </div>
@@ -249,6 +311,30 @@
   </div>
 
   <script>
+    // Handle Anonymous Toggle Logic
+    const anonymousToggle = document.getElementById('anonymousToggle');
+    const citizenNameInput = document.getElementById('citizenName');
+    const phoneInput = document.getElementById('phone');
+
+    anonymousToggle.addEventListener('change', (e) => {
+      if (e.target.checked) {
+        citizenNameInput.value = 'Anonymous Citizen';
+        phoneInput.value = '0000000000';
+        citizenNameInput.readOnly = true;
+        phoneInput.readOnly = true;
+        citizenNameInput.style.backgroundColor = '#edf2f7';
+        phoneInput.style.backgroundColor = '#edf2f7';
+      } else {
+        citizenNameInput.value = '';
+        phoneInput.value = '';
+        citizenNameInput.readOnly = false;
+        phoneInput.readOnly = false;
+        citizenNameInput.style.backgroundColor = '#f7fafc';
+        phoneInput.style.backgroundColor = '#f7fafc';
+      }
+    });
+
+    // Form Submission Logic
     document.getElementById('complaint-form').addEventListener('submit', async (e) => {
       e.preventDefault();
       
@@ -256,17 +342,14 @@
       submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin" style="margin-right: 8px;"></i> Submitting...';
       submitBtn.style.opacity = '0.7';
 
-      // Using your exact original payload structure
       const payload = {
-        citizenName: document.getElementById('citizenName').value,
-        phone: document.getElementById('phone').value,
+        citizenName: citizenNameInput.value,
+        phone: phoneInput.value,
         incidentType: document.getElementById('incidentType').value,
         description: document.getElementById('description').value
       };
 
       try {
-        // Notice we removed the http://127.0.0.1 part! 
-        // We also added /submit back to match your original code perfectly.
         const response = await fetch('/api/complaints/submit', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -293,15 +376,5 @@
       }
     });
   </script>
-  <script>
-    function handleLogout() {
-        // Clear the token and login flag
-        localStorage.removeItem('token');
-        localStorage.removeItem('isLoggedIn');
-        
-        // Redirect back to the login page
-        window.location.href = '/index.html';
-    }
-</script>
 </body>
 </html>
