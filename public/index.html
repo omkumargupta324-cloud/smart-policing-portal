@@ -29,7 +29,7 @@
       box-shadow: 0 10px 30px rgba(0,0,0,0.4), 
                   0 0 15px rgba(43, 108, 176, 0.2); 
       width: 100%;
-      max-width: 420px;
+      max-width: 440px;
       text-align: center;
       border: 1px solid rgba(255, 255, 255, 0.12); 
     }
@@ -49,7 +49,6 @@
       position: relative;
     }
     
-    /* Shield with 'OP' logic integrated */
     .portal-logo::after {
       content: 'OP';
       font-size: 32px;
@@ -136,14 +135,20 @@
       box-shadow: 0 6px 18px rgba(43, 108, 176, 0.3);
     }
 
-    /* Integrated Helper and Security Information */
+    /* Public Access Quick Links */
     .extra-links {
         margin-top: 25px;
         font-size: 13px;
         color: #a0aec0;
         display: flex;
-        justify-content: space-between;
+        flex-direction: column;
+        gap: 10px;
         align-items: center;
+    }
+    .public-links-row {
+        display: flex;
+        justify-content: space-around;
+        width: 100%;
     }
     .extra-links a {
         color: #a0aec0;
@@ -153,15 +158,15 @@
         color: #fff;
         text-decoration: underline;
     }
-    .public-complaint-btn {
+    .public-btn {
         color: #63b3ed !important;
         font-weight: bold;
     }
-    .public-complaint-btn:hover {
+    .public-btn:hover {
         color: #90cdf4 !important;
     }
     .security-notice {
-        margin-top: 30px;
+        margin-top: 20px;
         font-size: 11px;
         color: #a0aec0;
         font-style: italic;
@@ -189,7 +194,7 @@
     <form id="login-form">
       <div class="form-group">
         <label for="badge">Badge Number</label>
-        <input type="text" id="badge" required placeholder="e.g. TRF-101">
+        <input type="text" id="badge" required placeholder="e.g. OFF-101 / TRF-101">
       </div>
       <div class="form-group">
         <label for="password">Password</label>
@@ -199,7 +204,9 @@
       <div id="error-message">Invalid credentials. Please contact Command.</div>
       
       <div class="extra-links">
-        <a href="/citizen-complaint.html" class="public-complaint-btn">📢 File Public Complaint</a>
+        <div class="public-links-row">
+          <a href="/citizen-complaint.html" class="public-btn">📢 File Complaint / FIR</a>
+        </div>
         <a href="#">Forgot Password?</a>
       </div>
       <div class="security-notice">
@@ -210,7 +217,7 @@
 
   <script>
     document.getElementById('login-form').addEventListener('submit', async (e) => {
-      e.preventDefault(); // Stop the page from refreshing
+      e.preventDefault();
 
       const badge = document.getElementById('badge').value;
       const password = document.getElementById('password').value;
@@ -218,7 +225,6 @@
       errorMessage.style.display = 'none';
 
       try {
-        // Send the login data to our backend API
         const response = await fetch('/api/auth/login', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -228,20 +234,22 @@
         const data = await response.json();
 
         if (response.ok) {
-          // Save token and login flag
           localStorage.setItem('token', data.token);
           localStorage.setItem('isLoggedIn', 'true');
           
-          // Role-Based Routing: Send them to their specific portal
+          // Department & Role Routing
           if (data.department === 'Traffic') {
             window.location.href = '/traffic-dashboard.html';
           } else if (data.department === 'City') {
             window.location.href = '/city-dashboard.html';
+          } else if (data.department === 'Officer' || data.role === 'Officer' || data.role === 'Constable') {
+            // Direct Officers and Constables to the Officer Portal
+            window.location.href = '/officer-dashboard.html';
           } else {
+            // Central Command default
             window.location.href = '/central-dashboard.html';
           }
         } else {
-          // Show the specific error message from the backend
           errorMessage.textContent = data.message || 'Invalid credentials.';
           errorMessage.style.display = 'block';
         }
