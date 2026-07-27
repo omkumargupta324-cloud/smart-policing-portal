@@ -3,170 +3,267 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Omnagar Police | Smart Policing Portal</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <title>Omnagar Police | Unified Portal</title>
+  
+  <!-- Global Mark 2 Background Style -->
+  <link rel="stylesheet" href="/style.css">
+
   <style>
     body {
-      font-family: 'Poppins', sans-serif;
-      background: #0f172a;
-      color: #f8fafc;
-      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
       display: flex;
       justify-content: center;
       align-items: center;
       min-height: 100vh;
-      padding: 20px;
+      margin: 0;
+      color: #e2e8f0; 
+      padding: 20px 0;
       box-sizing: border-box;
     }
-    .portal-card {
-      background: #1e293b;
-      padding: 40px;
-      border-radius: 16px;
-      box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+
+    .login-container {
+      background: rgba(16, 21, 32, 0.88); 
+      backdrop-filter: blur(8px);
+      padding: 40px 35px;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5), 
+                  0 0 15px rgba(43, 108, 176, 0.2); 
       width: 100%;
       max-width: 440px;
-      border: 1px solid #334155;
       text-align: center;
+      border: 1px solid rgba(255, 255, 255, 0.12); 
     }
-    .badge-header {
-      font-size: 40px;
-      color: #38bdf8;
-      margin-bottom: 10px;
+
+    .portal-logo {
+      width: 70px;
+      height: 70px;
+      margin: 0 auto 15px;
+      background: radial-gradient(circle, #2b6cb0 0%, #1a365d 100%);
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border: 3px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 0 15px rgba(43, 108, 176, 0.3);
+      position: relative;
     }
-    h1 {
-      font-size: 22px;
+    
+    .portal-logo::after {
+      content: 'OP';
+      font-size: 28px;
+      font-weight: 800;
+      color: #fff;
+      position: absolute;
+    }
+
+    h2 {
+      color: #fff;
+      font-size: 24px;
       margin: 0 0 5px 0;
-      color: #f1f5f9;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      text-transform: uppercase;
     }
-    p.subtitle {
-      color: #94a3b8;
-      font-size: 13px;
-      margin-top: 0;
+    .subtitle {
+        color: #a0aec0;
+        font-size: 13px;
+        margin-bottom: 25px;
+        font-style: italic;
+    }
+
+    /* Tab Switcher */
+    .tab-container {
+      display: flex;
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 8px;
+      padding: 4px;
       margin-bottom: 25px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
     }
+    .tab-btn {
+      flex: 1;
+      padding: 10px 5px;
+      border: none;
+      background: transparent;
+      color: #a0aec0;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      border-radius: 6px;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      box-shadow: none;
+      margin-top: 0;
+    }
+    .tab-btn.active {
+      background: linear-gradient(135deg, #2c5282 0%, #1a365d 100%);
+      color: #fff;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    }
+
     .form-group {
-      margin-bottom: 15px;
+      margin-bottom: 18px;
       text-align: left;
     }
     label {
       display: block;
-      margin-bottom: 5px;
-      font-size: 12px;
-      color: #cbd5e1;
+      margin-bottom: 6px;
       font-weight: 600;
+      color: #a0aec0;
+      font-size: 13px;
     }
     input {
       width: 100%;
-      padding: 12px;
-      border-radius: 8px;
-      border: 1px solid #334155;
-      background: #0f172a;
-      color: white;
-      font-family: inherit;
+      padding: 12px 14px;
+      border: 1px solid #4a5568; 
+      border-radius: 6px;
       box-sizing: border-box;
+      background-color: #1a202c; 
+      color: #e2e8f0;
+      font-size: 15px;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    input::placeholder {
+        color: #4a5568;
     }
     input:focus {
-      outline: none;
-      border-color: #38bdf8;
+        border-color: #2b6cb0;
+        outline: none;
+        box-shadow: 0 0 8px rgba(43, 108, 176, 0.3);
     }
-    .login-btn {
+
+    .submit-btn {
       width: 100%;
-      padding: 12px;
-      background: #0284c7;
+      padding: 13px;
+      background: linear-gradient(135deg, #2c5282 0%, #1a365d 100%);
       color: white;
-      border: none;
-      border-radius: 8px;
-      font-weight: 700;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 6px;
       font-size: 15px;
+      font-weight: 700;
       cursor: pointer;
-      transition: background 0.2s;
       margin-top: 10px;
-    }
-    .login-btn:hover {
-      background: #0369a1;
-    }
-    .divider {
-      margin: 25px 0 20px 0;
-      border-top: 1px solid #334155;
-      position: relative;
-    }
-    .divider span {
-      position: absolute;
-      top: -10px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: #1e293b;
-      padding: 0 10px;
-      color: #64748b;
-      font-size: 11px;
-      font-weight: 600;
       text-transform: uppercase;
+      letter-spacing: 1px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      transition: background 0.3s, box-shadow 0.3s;
     }
+    .submit-btn:hover {
+      background: linear-gradient(135deg, #3182ce 0%, #2c5282 100%);
+      box-shadow: 0 6px 18px rgba(43, 108, 176, 0.3);
+    }
+
+    .traffic-btn {
+      background: linear-gradient(135deg, #c53030 0%, #742a2a 100%);
+    }
+    .traffic-btn:hover {
+      background: linear-gradient(135deg, #e53e3e 0%, #c53030 100%);
+    }
+
+    .login-form {
+      display: none;
+    }
+    .login-form.active {
+      display: block;
+    }
+
     .extra-links {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
+        margin-top: 25px;
+        font-size: 13px;
+        color: #a0aec0;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        align-items: center;
     }
     .public-btn {
-      display: block;
-      padding: 10px;
-      background: #0f172a;
-      color: #38bdf8;
-      border: 1px solid #334155;
-      border-radius: 8px;
-      text-decoration: none;
-      font-size: 13px;
-      font-weight: 600;
-      transition: all 0.2s;
+        color: #63b3ed !important;
+        font-weight: bold;
+        text-decoration: none;
     }
     .public-btn:hover {
-      border-color: #38bdf8;
-      background: #1e293b;
+        color: #90cdf4 !important;
+        text-decoration: underline;
     }
+    
+    /* New SOS Button Styling */
     .sos-btn {
-      display: block;
-      padding: 12px;
-      background: #dc2626;
-      color: white;
-      border-radius: 8px;
-      text-decoration: none;
-      font-size: 14px;
-      font-weight: 700;
-      transition: background 0.2s;
+        color: #fc8181 !important;
+        font-weight: bold;
+        text-decoration: none;
+        background: rgba(252, 129, 129, 0.1);
+        padding: 8px 16px;
+        border-radius: 6px;
+        border: 1px solid rgba(252, 129, 129, 0.3);
+        transition: all 0.3s ease;
+        margin-top: 5px;
     }
     .sos-btn:hover {
-      background: #b91c1c;
+        color: #fff !important;
+        background: rgba(229, 62, 62, 0.8);
+        border-color: #e53e3e;
+        box-shadow: 0 0 10px rgba(229, 62, 62, 0.5);
+    }
+
+    .security-notice {
+        margin-top: 25px;
+        font-size: 11px;
+        color: #a0aec0;
+        font-style: italic;
+    }
+
+    .error-msg {
+      color: #fc8181;
+      text-align: center;
+      margin-top: 15px;
+      font-size: 14px;
+      display: none;
+      font-weight: 600;
     }
   </style>
 </head>
 <body>
 
-  <div class="portal-card">
-    <div class="badge-header">
-      <i class="fa-solid fa-shield-halved"></i>
-    </div>
-    <h1>OMNAGAR POLICE</h1>
-    <p class="subtitle">Official Command & Citizen Services Portal</p>
+  <div class="login-container">
+    <div class="portal-logo"></div>
+    <h2>Omnagar Police</h2>
+    <div class="subtitle">Secure Unified Portal</div>
 
-    <!-- Officer Login Form -->
-    <form id="loginForm">
+    <!-- Tab Selector -->
+    <div class="tab-container">
+      <button type="button" class="tab-btn active" onclick="switchTab('general')">City/Urban Police</button>
+      <button type="button" class="tab-btn" onclick="switchTab('traffic')">Traffic Police</button>
+    </div>
+
+    <!-- FORM 1: City/Urban Police Login -->
+    <form id="general-login-form" class="login-form active">
       <div class="form-group">
-        <label>Officer ID / Username</label>
-        <input type="text" id="username" placeholder="Enter Police ID" required>
+        <label for="badge">City Police Badge Number</label>
+        <input type="text" id="badge" required placeholder="e.g. OFF-101">
       </div>
       <div class="form-group">
-        <label>Passcode</label>
-        <input type="password" id="password" placeholder="••••••••" required>
+        <label for="password">Password</label>
+        <input type="password" id="password" required placeholder="••••••••">
       </div>
-      <button type="submit" class="login-btn">Officer Login</button>
+      <button type="submit" class="submit-btn">Login to City Portal</button>
+      <div id="general-error" class="error-msg">Invalid credentials.</div>
     </form>
 
-    <div class="divider">
-      <span>Public Services</span>
-    </div>
+    <!-- FORM 2: Traffic Police Login -->
+    <form id="traffic-login-form" class="login-form">
+      <div class="form-group">
+        <label for="traffic-badge">Traffic Badge / Constable ID</label>
+        <input type="text" id="traffic-badge" required placeholder="e.g. TRF-101">
+      </div>
+      <div class="form-group">
+        <label for="traffic-password">Password</label>
+        <input type="password" id="traffic-password" required placeholder="••••••••">
+      </div>
+      <button type="submit" class="submit-btn traffic-btn">Login to Traffic Dashboard</button>
+      <div id="traffic-error" class="error-msg">Invalid credentials.</div>
+    </form>
 
-    <!-- Citizen Direct Access Links (No Login Required) -->
     <div class="extra-links">
       <a href="/citizen-complaint.html" class="public-btn">📢 File Public Complaint / FIR</a>
       <a href="/report-missing.html" class="public-btn" style="color: #fbbf24 !important;">📝 Report Missing Person</a>
@@ -174,30 +271,95 @@
       <a href="/secure-evidence.html" class="public-btn" style="color: #38bdf8 !important;">🛡️ Secure Evidence Upload</a>
       <a href="/sos-panic.html" class="sos-btn">🚨 EMERGENCY SOS / PANIC</a>
     </div>
+    <div class="security-notice">
+      System monitored. Unauthorized usage strictly prohibited.
+    </div>
   </div>
 
   <script>
-    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+    // Tab Switcher Logic
+    function switchTab(type) {
+      const tabs = document.querySelectorAll('.tab-btn');
+      const forms = document.querySelectorAll('.login-form');
+      
+      tabs.forEach(tab => tab.classList.remove('active'));
+      forms.forEach(form => form.classList.remove('active'));
+
+      if (type === 'general') {
+        tabs[0].classList.add('active');
+        document.getElementById('general-login-form').classList.add('active');
+      } else {
+        tabs[1].classList.add('active');
+        document.getElementById('traffic-login-form').classList.add('active');
+      }
+    }
+
+    // FORM 1: City/Urban Police Login Handler
+    document.getElementById('general-login-form').addEventListener('submit', async (e) => {
       e.preventDefault();
-      const username = document.getElementById('username').value;
+      const badge = document.getElementById('badge').value;
       const password = document.getElementById('password').value;
+      const errorDiv = document.getElementById('general-error');
+      errorDiv.style.display = 'none';
 
       try {
         const response = await fetch('/api/auth/login', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ username, password })
+          body: JSON.stringify({ badgeNumber: badge, password })
         });
 
         const data = await response.json();
+
         if (response.ok) {
           localStorage.setItem('token', data.token);
-          window.location.href = '/central-dashboard.html';
+          localStorage.setItem('isLoggedIn', 'true');
+
+          if (data.department === 'City') {
+            window.location.href = '/city-dashboard.html';
+          } else if (data.department === 'Officer' || data.role === 'Officer' || data.role === 'Constable') {
+            window.location.href = '/officer-dashboard.html';
+          } else {
+            window.location.href = '/central-dashboard.html';
+          }
         } else {
-          alert(data.error || 'Login failed');
+          errorDiv.textContent = data.message || 'Invalid credentials.';
+          errorDiv.style.display = 'block';
         }
       } catch (err) {
-        alert('Server connection error');
+        errorDiv.textContent = 'Server connection failed.';
+        errorDiv.style.display = 'block';
+      }
+    });
+
+    // FORM 2: Traffic Police Login Handler
+    document.getElementById('traffic-login-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const badge = document.getElementById('traffic-badge').value;
+      const password = document.getElementById('traffic-password').value;
+      const errorDiv = document.getElementById('traffic-error');
+      errorDiv.style.display = 'none';
+
+      try {
+        const response = await fetch('/api/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ badgeNumber: badge, password })
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          localStorage.setItem('token', data.token);
+          localStorage.setItem('isLoggedIn', 'true');
+          window.location.href = '/traffic-dashboard.html';
+        } else {
+          errorDiv.textContent = data.message || 'Invalid credentials.';
+          errorDiv.style.display = 'block';
+        }
+      } catch (err) {
+        errorDiv.textContent = 'Server connection failed.';
+        errorDiv.style.display = 'block';
       }
     });
   </script>
