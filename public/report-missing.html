@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Omnagar Police | Report Missing Person</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <style>
+    body { font-family: 'Poppins', sans-serif; background: #0f172a; color: #f8fafc; margin: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; box-sizing: border-box; }
+    .form-container { background: #1e293b; padding: 40px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); width: 100%; max-width: 500px; border: 1px solid #334155; }
+    h2 { color: #fbbf24; margin-top: 0; display: flex; align-items: center; gap: 10px; }
+    .form-group { margin-bottom: 15px; }
+    label { display: block; margin-bottom: 5px; font-size: 13px; color: #94a3b8; font-weight: 600; }
+    input, textarea, select { width: 100%; padding: 12px; border-radius: 6px; border: 1px solid #334155; background: #0f172a; color: white; font-family: inherit; box-sizing: border-box; }
+    input:focus, textarea:focus, select:focus { outline: none; border-color: #fbbf24; }
+    .submit-btn { width: 100%; padding: 14px; background: #fbbf24; color: #0f172a; border: none; border-radius: 6px; font-weight: 700; font-size: 16px; cursor: pointer; transition: background 0.2s; margin-top: 10px; }
+    .submit-btn:hover { background: #f59e0b; }
+    .back-link { display: block; text-align: center; margin-top: 20px; color: #38bdf8; text-decoration: none; font-size: 14px; font-weight: 600; }
+    .status-msg { text-align: center; margin-top: 15px; font-size: 14px; font-weight: 600; display: none; }
+  </style>
+</head>
+<body>
+
+  <div class="form-container">
+    <h2><i class="fa-solid fa-user-clock"></i> Report Missing Person</h2>
+    <p style="color: #94a3b8; font-size: 13px; margin-bottom: 25px;">Please provide as much accurate information as possible. False reporting is a punishable offense.</p>
+
+    <form id="missingForm">
+      <!-- Hidden field because citizens can only report 'Missing', not 'Wanted' -->
+      <input type="hidden" id="category" value="Missing">
+      
+      <div class="form-group">
+        <label>Full Name of Missing Person *</label>
+        <input type="text" id="fullName" required>
+      </div>
+
+      <div style="display: flex; gap: 15px;">
+        <div class="form-group" style="flex: 1;">
+          <label>Age</label>
+          <input type="number" id="age">
+        </div>
+        <div class="form-group" style="flex: 1;">
+          <label>Gender</label>
+          <select id="gender">
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+            <option value="Other">Other</option>
+            <option value="Unknown">Unknown</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Last Seen Location *</label>
+        <input type="text" id="lastSeenLocation" required placeholder="e.g. Central Market, Omnagar">
+      </div>
+
+      <div class="form-group">
+        <label>Physical Description & Clothing</label>
+        <textarea id="description" rows="3" placeholder="Height, hair color, clothes worn..."></textarea>
+      </div>
+
+      <div class="form-group">
+        <label>Photo URL (Optional)</label>
+        <input type="text" id="photoUrl" placeholder="https://link-to-photo.com/image.jpg">
+      </div>
+
+      <button type="submit" class="submit-btn">Submit Official Report</button>
+      <div id="statusMsg" class="status-msg"></div>
+    </form>
+
+    <a href="/index.html" class="back-link">← Return to Portal Login</a>
+  </div>
+
+  <script>
+    document.getElementById('missingForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const statusMsg = document.getElementById('statusMsg');
+      const submitBtn = document.querySelector('.submit-btn');
+      
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Submitting...';
+      
+      const payload = {
+        fullName: document.getElementById('fullName').value,
+        category: document.getElementById('category').value,
+        age: document.getElementById('age').value || null,
+        gender: document.getElementById('gender').value,
+        lastSeenLocation: document.getElementById('lastSeenLocation').value,
+        description: document.getElementById('description').value,
+        photoUrl: document.getElementById('photoUrl').value || undefined
+      };
+
+      try {
+        const response = await fetch('/api/missing-wanted', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        if (response.ok) {
+          statusMsg.style.color = '#4ade80';
+          statusMsg.textContent = 'Report successfully submitted to Omnagar Police.';
+          statusMsg.style.display = 'block';
+          document.getElementById('missingForm').reset();
+        } else {
+          throw new Error('Failed to submit');
+        }
+      } catch (error) {
+        statusMsg.style.color = '#f87171';
+        statusMsg.textContent = 'Error submitting report. Please try again.';
+        statusMsg.style.display = 'block';
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Submit Official Report';
+      }
+    });
+  </script>
+</body>
+</html>

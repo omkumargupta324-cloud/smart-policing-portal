@@ -106,6 +106,8 @@ const evidenceRoutes = require('./routes/evidenceRoutes');
 app.use('/api/evidence', evidenceRoutes);
 const transparencyRoutes = require('./routes/transparencyRoutes');
 app.use('/api/transparency', transparencyRoutes);
+const missingWantedRoutes = require('./routes/missingWantedRoutes');
+app.use('/api/missing-wanted', missingWantedRoutes);
 
 // ==========================================
 // TRAFFIC CHALLAN DATABASE ROUTE

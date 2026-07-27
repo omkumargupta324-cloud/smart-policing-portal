@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Omnagar Police | Missing & Wanted Persons</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <style>
+    body { font-family: 'Poppins', sans-serif; background: #0f172a; color: #f8fafc; margin: 0; padding-bottom: 50px; }
+    .hero { background: linear-gradient(135deg, #1e293b, #0f172a); border-bottom: 2px solid #334155; padding: 40px 20px; text-align: center; }
+    .hero h1 { margin: 0; font-size: 28px; color: #f43f5e; }
+    .hero p { color: #94a3b8; font-size: 14px; margin-top: 5px; }
+
+    .container { max-width: 1100px; margin: 30px auto; padding: 0 20px; }
+
+    .controls { display: flex; gap: 15px; margin-bottom: 30px; flex-wrap: wrap; }
+    .search-input { flex: 2; min-width: 200px; padding: 12px 16px; border-radius: 8px; border: 1px solid #334155; background: #1e293b; color: white; font-size: 14px; }
+    .filter-select { flex: 1; min-width: 140px; padding: 12px 16px; border-radius: 8px; border: 1px solid #334155; background: #1e293b; color: white; font-size: 14px; }
+
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; }
+    .card { background: #1e293b; border-radius: 12px; overflow: hidden; border: 1px solid #334155; transition: transform 0.2s, box-shadow 0.2s; }
+    .card:hover { transform: translateY(-4px); box-shadow: 0 10px 25px rgba(0,0,0,0.4); }
+
+    .badge { position: absolute; top: 12px; left: 12px; padding: 4px 10px; border-radius: 6px; font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .badge-wanted { background: #dc2626; color: white; }
+    .badge-missing { background: #0284c7; color: white; }
+
+    .card-img-container { position: relative; height: 200px; background: #0f172a; display: flex; justify-content: center; align-items: center; }
+    .card-img { width: 100%; height: 100%; object-fit: cover; }
+
+    .card-body { padding: 20px; }
+    .card-title { font-size: 18px; font-weight: 700; margin: 0 0 10px 0; color: #f1f5f9; }
+    .card-info { font-size: 13px; color: #94a3b8; margin: 4px 0; }
+    .card-info strong { color: #cbd5e1; }
+    .reward-tag { margin-top: 15px; background: rgba(234, 179, 8, 0.1); border: 1px solid #eab308; color: #eab308; padding: 6px 10px; border-radius: 6px; font-size: 12px; font-weight: bold; text-align: center; }
+
+    .empty-msg { text-align: center; color: #64748b; font-size: 15px; grid-column: 1 / -1; padding: 40px 0; }
+  </style>
+</head>
+<body>
+
+  <div class="hero">
+    <h1><i class="fa-solid fa-user-ninja"></i> MISSING & WANTED PERSONS</h1>
+    <p>Public Alert Portal — Omnagar Police Department</p>
+  </div>
+
+  <div class="container">
+    <div class="controls">
+      <input type="text" id="searchInput" class="search-input" placeholder="Search by name, location, or details..." oninput="filterCards()">
+      <select id="categoryFilter" class="filter-select" onchange="filterCards()">
+        <option value="ALL">All Categories</option>
+        <option value="Wanted">Wanted</option>
+        <option value="Missing">Missing</option>
+      </select>
+    </div>
+
+    <div class="grid" id="recordsGrid">
+      <div class="empty-msg"><i class="fa-solid fa-spinner fa-spin"></i> Loading database records...</div>
+    </div>
+  </div>
+
+  <script>
+    let allRecords = [];
+
+    async function fetchRecords() {
+      try {
+        const res = await fetch('/api/missing-wanted');
+        allRecords = await res.json();
+        renderRecords(allRecords);
+      } catch (err) {
+        document.getElementById('recordsGrid').innerHTML = '<div class="empty-msg">Failed to connect to database.</div>';
+      }
+    }
+
+    function renderRecords(records) {
+      const grid = document.getElementById('recordsGrid');
+      grid.innerHTML = '';
+
+      if (records.length === 0) {
+        grid.innerHTML = '<div class="empty-msg">No active records found in database.</div>';
+        return;
+      }
+
+      records.forEach(item => {
+        const badgeClass = item.category === 'Wanted' ? 'badge-wanted' : 'badge-missing';
+        
+        grid.innerHTML += `
+          <div class="card">
+            <div class="card-img-container">
+              <span class="badge ${badgeClass}">${item.category}</span>
+              <img src="${item.photoUrl || 'https://via.placeholder.com/300x200'}" class="card-img" alt="${item.fullName}">
+            </div>
+            <div class="card-body">
+              <div class="card-title">${item.fullName}</div>
+              <div class="card-info"><strong>Age / Gender:</strong> ${item.age || 'N/A'} | ${item.gender || 'N/A'}</div>
+              <div class="card-info"><strong>Last Seen:</strong> ${item.lastSeenLocation}</div>
+              <div class="card-info"><strong>Contact:</strong> ${item.contactStation}</div>
+              <p style="font-size: 12px; color: #64748b; margin-top: 10px;">${item.description || 'No additional details.'}</p>
+              ${item.reward && item.reward !== 'N/A' ? `<div class="reward-tag">💰 REWARD: ${item.reward}</div>` : ''}
+            </div>
+          </div>
+        `;
+      });
+    }
+
+    function filterCards() {
+      const search = document.getElementById('searchInput').value.toLowerCase();
+      const cat = document.getElementById('categoryFilter').value;
+
+      const filtered = allRecords.filter(item => {
+        const matchesCat = cat === 'ALL' || item.category === cat;
+        const matchesSearch = item.fullName.toLowerCase().includes(search) || 
+                              item.lastSeenLocation.toLowerCase().includes(search) ||
+                              (item.description && item.description.toLowerCase().includes(search));
+        return matchesCat && matchesSearch;
+      });
+
+      renderRecords(filtered);
+    }
+
+    fetchRecords();
+  </script>
+</body>
+</html>
