@@ -5,6 +5,7 @@ const path = require('path');
 const mongoose = require('mongoose'); 
 const http = require('http'); // NEW: Required for WebSockets
 const { Server } = require('socket.io'); // NEW: Real-time networking
+const secureEvidenceRoutes = require('./routes/secureEvidenceRoutes');
 
 // Load the secrets from the .env file
 dotenv.config();
@@ -108,6 +109,7 @@ const transparencyRoutes = require('./routes/transparencyRoutes');
 app.use('/api/transparency', transparencyRoutes);
 const missingWantedRoutes = require('./routes/missingWantedRoutes');
 app.use('/api/missing-wanted', missingWantedRoutes);
+app.use('/api/evidence', secureEvidenceRoutes);
 
 // ==========================================
 // TRAFFIC CHALLAN DATABASE ROUTE
