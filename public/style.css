@@ -13,6 +13,12 @@ body {
    PUBLIC NAVIGATION BAR (DOES NOT AFFECT BODY) 
    ========================================= */
 .public-navbar {
+  position: absolute; 
+  top: 0;
+  left: 0;
+  width: 100%;
+  box-sizing: border-box;
+  z-index: 1000;
   display: flex;
   justify-content: space-between;
   align-items: center;
