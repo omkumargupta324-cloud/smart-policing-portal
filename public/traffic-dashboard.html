@@ -181,12 +181,12 @@
     const submitBtn = document.querySelector('.submit-btn');
     submitBtn.textContent = 'Issuing...';
 
-    // Pack the data to match your database schema
+    // Pack the data with the exact keys expected by your Mongoose schema
     const payload = {
       challanId: document.getElementById('challanId').value,
-      vehicleNumber: document.getElementById('vehiclePlate').value, 
-      violation: document.getElementById('violationType').value,
-      fineAmount: document.getElementById('fineAmount').value,
+      vehiclePlate: document.getElementById('vehiclePlate').value, 
+      violationType: document.getElementById('violationType').value,
+      fineAmount: Number(document.getElementById('fineAmount').value),
       status: 'Unpaid',
       location: 'Traffic Command'
     };
