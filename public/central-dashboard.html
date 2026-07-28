@@ -62,6 +62,13 @@
       </div>
       <button type="submit" class="submit-btn">File Report</button>
     </form>
+    <!-- FIR Display Container -->
+<div class="fir-section" style="margin-top: 30px;">
+  <h2>Filed FIR Database</h2>
+  <div id="fir-list-container">
+    <p style="color: #a0aec0;">Loading FIR records...</p>
+  </div>
+</div>
   </div>
 
   <script>
@@ -166,6 +173,50 @@
       submitBtn.textContent = 'File Report';
     }
   });
+</script>
+<script>
+  async function fetchAndDisplayFIRs() {
+    const container = document.getElementById('fir-list-container');
+    if (!container) return;
+
+    try {
+      const token = localStorage.getItem('token');
+
+      const res = await fetch('/api/fir', {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      const firs = await res.json();
+
+      if (!res.ok) {
+        container.innerHTML = `<p style="color: #fc8181;">Error loading FIRs: ${firs.error || firs.message}</p>`;
+        return;
+      }
+
+      if (!firs || firs.length === 0) {
+        container.innerHTML = '<p style="color: #a0aec0;">No FIR records found in the database.</p>';
+        return;
+      }
+
+      container.innerHTML = firs.map(fir => `
+        <div style="background: rgba(255, 255, 255, 0.05); padding: 15px; margin-bottom: 12px; border-radius: 6px; border: 1px solid rgba(255, 255, 255, 0.1);">
+          <h4 style="margin: 0 0 8px 0; color: #63b3ed;">Case #: ${fir.caseNumber}</h4>
+          <p style="margin: 0 0 8px 0; color: #e2e8f0;">${fir.description}</p>
+          <span style="font-size: 12px; background: #2b6cb0; color: white; padding: 3px 8px; border-radius: 4px; font-weight: bold;">
+            Status: ${fir.status || 'Open'}
+          </span>
+        </div>
+      `).join('');
+
+    } catch (err) {
+      console.error(err);
+      container.innerHTML = '<p style="color: #fc8181;">Server connection failed. Could not fetch FIRs.</p>';
+    }
+  }
+
+  window.addEventListener('DOMContentLoaded', fetchAndDisplayFIRs);
 </script>
 </body>
 </html>
