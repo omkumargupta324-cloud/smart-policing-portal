@@ -41,26 +41,28 @@
   <link rel="stylesheet" href="/style.css">
 </head>
 <body>
-    <!-- Secure Navigation Wrapper (Hidden by default) -->
-<div id="secure-nav" style="display: none;">
-    <nav style="background-color: #1a1e29; padding: 15px; border-bottom: 2px solid #333; display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;">
-        <!-- Existing Links -->
-        <a href="/central-dashboard.html" style="color: #4da6ff; text-decoration: none; font-weight: bold; padding: 5px;">Central Dashboard</a>
-        <a href="/officer-dashboard.html" style="color: white; text-decoration: none; font-weight: bold; padding: 5px;">Officer Portal</a>
-        <a href="/traffic-dashboard.html" style="color: white; text-decoration: none; font-weight: bold; padding: 5px;">Traffic Control</a>
-        <a href="/transparency-dashboard.html" style="color: white; text-decoration: none; font-weight: bold; padding: 5px;">Transparency Stats</a>
-        <a href="/citizen-complaint.html" style="color: white; text-decoration: none; font-weight: bold; padding: 5px;">Complaints</a>
-        <a href="/evidence-portal.html" style="color: white; text-decoration: none; font-weight: bold; padding: 5px;">Evidence Portal</a>
-        <a href="/services-portal.html" style="color: white; text-decoration: none; font-weight: bold; padding: 5px;">Services</a>
-        
-        <!-- Newly Added Links -->
-        <a href="/awareness-portal.html" style="color: white; text-decoration: none; font-weight: bold; padding: 5px;">Awareness</a>
-        <a href="/challan-payment.html" style="color: white; text-decoration: none; font-weight: bold; padding: 5px;">Pay Challan</a>
-        <a href="/community-connect.html" style="color: white; text-decoration: none; font-weight: bold; padding: 5px;">Community</a>
-        <a href="/ive-updates.html" style="color: white; text-decoration: none; font-weight: bold; padding: 5px;">Live Updates</a>
-        <a href="/lost-found.html" style="color: white; text-decoration: none; font-weight: bold; padding: 5px;">Lost & Found</a>
-        <a href="/sos-panic.html" style="color: #fc8181; text-decoration: none; font-weight: bold; padding: 5px;">SOS / Panic</a>
-    </nav>
+    <nav class="public-navbar">
+  <div class="nav-brand">
+    <h2>Smart Policing</h2>
+    <span>Citizen Portal</span>
+  </div>
+  
+  <ul class="nav-links">
+    <li><a href="awareness.html">Awareness</a></li>
+    <li><a href="pay-challan.html">Challan Payment</a></li>
+    <li><a href="challan-database.html">Challan Database</a></li>
+    <li><a href="complaint.html">Citizen Complaint</a></li>
+    <li><a href="community.html">Community Connect</a></li>
+    <li><a href="evidence.html">Evidence Portal</a></li>
+    <li><a href="services.html">Services</a></li>
+    <li><a href="lost-found.html">Lost / Found</a></li>
+  </ul>
+
+  <!-- Button to direct officials to the login screen -->
+  <div class="nav-actions">
+    <a href="login.html" class="officer-login-btn">Officer Login</a>
+  </div>
+</nav>
 </div>
 
   <div class="hero">
@@ -185,15 +187,6 @@
       } catch (error) { alert('Payment failed.'); btn.innerHTML = '<i class="fa-solid fa-credit-card"></i> Pay Now to Submit'; }
     });
   </script>
-  <script>
-    function handleLogout() {
-        // Clear the token and login flag
-        localStorage.removeItem('token');
-        localStorage.removeItem('isLoggedIn');
-        
-        // Redirect back to the login page
-        window.location.href = '/index.html';
-    }
-</script>
+  
 </body>
 </html>

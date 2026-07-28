@@ -9,3 +9,132 @@ body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   color: #ffffff;
 }
+/* =========================================
+   PUBLIC NAVIGATION BAR (DOES NOT AFFECT BODY) 
+   ========================================= */
+.public-navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.75); /* Semi-transparent black to let your theme shine through */
+  padding: 15px 30px;
+  color: white;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+  border-bottom: 2px solid #ffffff33; /* Subtle white line to separate it from the background */
+}
+
+.nav-brand h2 {
+  margin: 0;
+  font-size: 22px;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
+.nav-brand span {
+  font-size: 12px;
+  color: #a9b0b7;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.nav-links {
+  list-style: none;
+  display: flex;
+  gap: 20px;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-links li a {
+  text-decoration: none;
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.nav-links li a:hover {
+  color: #ffb703; /* A striking gold/yellow highlight on hover to pop against the blue/red */
+}
+
+.officer-login-btn {
+  background-color: #ff0000; /* Matches your theme's red */
+  color: white;
+  text-decoration: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  font-weight: bold;
+  font-size: 14px;
+  transition: background-color 0.3s ease, transform 0.2s;
+}
+
+.officer-login-btn:hover {
+  background-color: #cc0000;
+  transform: scale(1.05);
+}
+/* =========================================
+   OFFICER NAVIGATION BAR (SECURE PORTAL) 
+   ========================================= */
+.officer-navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #0b1320; /* Solid dark tactical background */
+  padding: 15px 30px;
+  color: white;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.7);
+  border-bottom: 2px solid #0000a0; /* Matches your theme's blue */
+}
+
+.officer-navbar .nav-brand h2 {
+  margin: 0;
+  font-size: 22px;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
+.officer-navbar .nav-brand span.badge {
+  font-size: 12px;
+  color: #ff0000; /* Alert red to signify a restricted area */
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-weight: bold;
+}
+
+.officer-navbar .nav-links {
+  list-style: none;
+  display: flex;
+  gap: 20px;
+  margin: 0;
+  padding: 0;
+}
+
+.officer-navbar .nav-links li a {
+  text-decoration: none;
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.officer-navbar .nav-links li a:hover {
+  color: #4cc9f0; /* Bright cyan hover effect */
+}
+
+/* Styled specifically as a button instead of a link */
+.logout-btn {
+  background-color: transparent;
+  color: #ff0000;
+  border: 1px solid #ff0000;
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-weight: bold;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.logout-btn:hover {
+  background-color: #ff0000;
+  color: white;
+}
