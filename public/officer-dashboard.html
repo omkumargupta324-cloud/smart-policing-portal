@@ -91,23 +91,25 @@
   </script>
   <script>
   document.addEventListener('DOMContentLoaded', () => {
+    // 1. Security Check
     const token = localStorage.getItem('token');
     
-    // If no token is found, kick them to the login page immediately
     if (!token) {
       alert("Unauthorized Access. Please log in first.");
-      window.location.href = "index.html"; 
+      window.location.href = "/"; // Safely routes to your root login page
+    }
+
+    // 2. Logout Functionality (Now safely inside the load listener)
+    const logoutBtn = document.getElementById('logout-btn');
+    if (logoutBtn) {
+      logoutBtn.addEventListener('click', () => {
+        localStorage.removeItem('token'); // Destroys the login token
+        window.location.href = "/"; // Sends you back to the login screen
+      });
+    } else {
+      console.error("Logout button not found on this page.");
     }
   });
-
-  // Logout Functionality
-  const logoutBtn = document.getElementById('logout-btn');
-  if (logoutBtn) {
-    logoutBtn.addEventListener('click', () => {
-      localStorage.removeItem('token');
-      window.location.href = "index.html"; 
-    });
-  }
 </script>
 </body>
 </html>
