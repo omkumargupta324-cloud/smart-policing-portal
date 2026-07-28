@@ -49,34 +49,46 @@
         () => { userLocation = "GPS Location Unavailable"; }
       );
     }
+async function sendSOS() {
+  const name = document.getElementById('citizen-name').value || "Anonymous Citizen";
+  const phone = document.getElementById('citizen-phone').value || "Not Provided";
+  const btn = document.getElementById('panic-btn');
+  const statusMsg = document.getElementById('status-msg');
 
-    function sendSOS() {
-      const name = document.getElementById('citizen-name').value || "Anonymous Citizen";
-      const phone = document.getElementById('citizen-phone').value || "Not Provided";
-      const btn = document.getElementById('panic-btn');
-      const statusMsg = document.getElementById('status-msg');
+  btn.style.background = "#22c55e";
+  btn.style.borderColor = "#4bef7d";
+  btn.innerHTML = `<i class="fa-solid fa-check"></i><br>SENT`;
 
-      btn.style.background = "#22c55e";
-      btn.style.borderColor = "#bbf7d0";
-      btn.innerHTML = `<i class="fa-solid fa-check"></i><br>SENT`;
+  statusMsg.style.color = "#4ade80";
+  statusMsg.innerHTML = "🚨 Emergency Broadcast Sent! Police Dispatched.";
 
-      statusMsg.style.color = "#4ade80";
-      statusMsg.innerHTML = "🚨 Emergency Broadcast Sent! Police Dispatched.";
+  const payload = {
+    name,
+    phone,
+    location: userLocation,
+    timestamp: new Date().toISOString()
+  };
 
-      // Emit live WebSocket signal to server
-      socket.emit('trigger-sos', {
-        name,
-        phone,
-        location: userLocation,
-        timestamp: new Date().toLocaleTimeString()
-      });
+  // 1. Emit live WebSocket signal to police dashboard
+  socket.emit('trigger-sos', payload);
 
-      setTimeout(() => {
-        btn.style.background = "linear-gradient(135deg, #e11d48, #9f1239)";
-        btn.style.borderColor = "#fecdd3";
-        btn.innerHTML = `<i class="fa-solid fa-bell-concierge"></i><br>SOS`;
-      }, 5000);
-    }
-  </script>
+  // 2. Save emergency log to MongoDB database
+  try {
+    await fetch('/api/emergency/sos', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+  } catch (err) {
+    console.error('Failed to log SOS to database:', err);
+  }
+
+  setTimeout(() => {
+    btn.style.background = "linear-gradient(135deg, #e11d48, #9f1239)";
+    btn.style.borderColor = "#fecdd3";
+    btn.innerHTML = `<i class="fa-solid fa-bell-concierge"></i><br>SOS`;
+  }, 5000);
+}
+      </script>
 </body>
 </html>

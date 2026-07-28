@@ -184,6 +184,44 @@
     });
   </script>
   <script>
+    document.getElementById('lost-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+
+  const btn = document.getElementById('btn-report');
+  btn.textContent = 'Submitting...';
+
+  const payload = {
+    ownerName: document.getElementById('ownerName').value,
+    itemName: document.getElementById('itemName').value,
+    description: document.getElementById('lostDesc').value
+  };
+
+  try {
+    const res = await fetch('/api/lost-found/report', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+
+    const data = await res.json();
+
+    if (res.ok) {
+      // Display success box with database response details
+      document.getElementById('res-report-id').textContent = data.reportId || data._id || 'REG-' + Date.now().toString().slice(-5);
+      document.getElementById('res-report-status').textContent = data.status || 'Under Investigation';
+      document.getElementById('res-report-officer').textContent = data.assignedOfficer || 'Property Cell Duty Officer';
+      document.getElementById('report-success').style.display = 'block';
+
+      document.getElementById('lost-form').reset();
+    } else {
+      alert(data.error || 'Failed to register lost item report.');
+    }
+  } catch (err) {
+    alert('Server error while submitting report. Please check your connection.');
+  } finally {
+    btn.textContent = 'Submit Report';
+  }
+});
     function handleLogout() {
         // Clear the token and login flag
         localStorage.removeItem('token');
