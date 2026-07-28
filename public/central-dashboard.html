@@ -182,7 +182,7 @@
     try {
       const token = localStorage.getItem('token');
 
-      const res = await fetch('/api/fir', {
+      const res = await fetch('/api/fir/all', {
         headers: {
           'Authorization': `Bearer ${token}`
         }
