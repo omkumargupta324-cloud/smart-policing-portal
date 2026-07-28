@@ -174,5 +174,48 @@
         window.location.href = '/index.html';
     }
 </script>
+<script>
+  document.getElementById('challan-form').addEventListener('submit', async (e) => {
+    e.preventDefault(); // Stops the page from refreshing
+
+    const submitBtn = document.querySelector('.submit-btn');
+    submitBtn.textContent = 'Issuing...';
+
+    // Pack the data to match your database schema
+    const payload = {
+      challanId: document.getElementById('challanId').value,
+      vehicleNumber: document.getElementById('vehiclePlate').value, 
+      violation: document.getElementById('violationType').value,
+      fineAmount: document.getElementById('fineAmount').value,
+      status: 'Unpaid',
+      location: 'Traffic Command'
+    };
+
+    try {
+      // Send data to the traffic API route
+      const res = await fetch('/api/traffic/issue', { 
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}` // Include security token
+        },
+        body: JSON.stringify(payload)
+      });
+
+      if (res.ok) {
+        alert('✅ Challan Issued and Saved to Database!');
+        document.getElementById('challan-form').reset(); // Clear the form
+      } else {
+        const errorData = await res.json();
+        alert('❌ Error: ' + (errorData.error || 'Failed to issue ticket.'));
+      }
+    } catch (error) {
+      console.error(error);
+      alert('Server error. Could not connect to database.');
+    } finally {
+      submitBtn.textContent = 'Issue Ticket';
+    }
+  });
+</script>
 </body>
 </html>
