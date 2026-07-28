@@ -128,6 +128,44 @@
     document.body.appendChild(alertBox);
   });
 </script>
+<script>
+  document.getElementById('fir-form').addEventListener('submit', async (e) => {
+    e.preventDefault(); // Stops the page from refreshing
 
+    const submitBtn = document.querySelector('.submit-btn');
+    submitBtn.textContent = 'Filing...';
+
+    const payload = {
+      caseNumber: document.getElementById('caseNumber').value,
+      description: document.getElementById('description').value,
+      status: 'Open' 
+    };
+
+    try {
+      // NOTE: If your FIR route is named something else (like /api/firs/create), change the URL below!
+      const res = await fetch('/api/fir', { 
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        },
+        body: JSON.stringify(payload)
+      });
+
+      if (res.ok) {
+        alert('✅ FIR Filed Successfully and Saved to Database!');
+        document.getElementById('fir-form').reset();
+      } else {
+        const errorData = await res.json();
+        alert('❌ Error: ' + (errorData.error || 'Failed to file FIR.'));
+      }
+    } catch (error) {
+      console.error(error);
+      alert('Server error. Could not connect to database.');
+    } finally {
+      submitBtn.textContent = 'File Report';
+    }
+  });
+</script>
 </body>
 </html>
