@@ -175,28 +175,7 @@
       }
     });
   </script>
-  <script>
-  document.addEventListener('DOMContentLoaded', () => {
-    // 1. Security Check
-    const token = localStorage.getItem('token');
-    
-    if (!token) {
-      alert("Unauthorized Access. Please log in first.");
-      window.location.href = "/"; // Safely routes to your root login page
-    }
-
-    // 2. Logout Functionality (Now safely inside the load listener)
-    const logoutBtn = document.getElementById('logout-btn');
-    if (logoutBtn) {
-      logoutBtn.addEventListener('click', () => {
-        localStorage.removeItem('token'); // Destroys the login token
-        window.location.href = "/"; // Sends you back to the login screen
-      });
-    } else {
-      console.error("Logout button not found on this page.");
-    }
-  });
-</script>
+  
   
 </body>
 </html>
