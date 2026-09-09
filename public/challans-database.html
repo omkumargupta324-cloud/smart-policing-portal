@@ -87,7 +87,7 @@
           <th>Vehicle Number</th>
           <th>Violation Name</th>
           <th>Fine Amount</th>
-          <th>Location</th>
+          <th>Challan ID</th>
           <th>Status</th>
           <th>Date</th>
         </tr>
@@ -127,10 +127,10 @@
 
           const row = `
             <tr>
-              <td style="font-weight: bold; color: #fff;">${challan.vehicleNumber || 'N/A'}</td>
-              <td>${challan.violation || 'N/A'}</td>
+              <td style="font-weight: bold; color: #fff;">${challan.vehiclePlate || challan.vehicleNumber || 'N/A'}</td>
+              <td>${challan.violationType || challan.violation || 'N/A'}</td>
               <td>₹${challan.fineAmount || 0}</td>
-              <td>${challan.location || 'N/A'}</td>
+              <td style="font-family: monospace; color: #4cc9f0;">${challan.challanId || 'N/A'}</td>
               <td class="${statusClass}">${challan.status || 'Pending'}</td>
               <td>${date}</td>
             </tr>
