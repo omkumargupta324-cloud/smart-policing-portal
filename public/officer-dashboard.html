@@ -72,25 +72,42 @@
           const div = document.createElement('div');
           div.className = `ticket ${isEscalated ? 'escalated' : ''}`;
           
+          // Smart check for anonymity
+          const isAnonymous = ticket.isAnonymous === true || ticket.isAnonymous === "true" || ticket.name === "Anonymous";
+          
+          const displayName = isAnonymous ? '<span style="color: #e53e3e; font-style: italic; font-weight: bold;">Anonymous</span>' : (ticket.name || ticket.complainantName || 'Not Provided');
+          const displayPhone = isAnonymous ? '<span style="color: #e53e3e; font-style: italic; font-weight: bold;">Anonymous</span>' : (ticket.phone || ticket.contact || 'Not Provided');
+          const displayAddress = isAnonymous ? '<span style="color: #e53e3e; font-style: italic; font-weight: bold;">Anonymous</span>' : (ticket.address || ticket.location || 'Not Provided');
+
           div.innerHTML = `
-            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-              <h3>${ticket.title || ticket.incidentType || 'Citizen Report'}</h3>
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px;">
+              <h3 style="margin: 0; color: #1a365d; font-size: 20px;">${ticket.category || ticket.title || ticket.incidentType || 'Citizen Report'}</h3>
             </div>
-            <div class="badge"><i class="fa-solid fa-user-shield"></i> Assigned To: ${ticket.assignedTo || 'Level 0 Officer'}</div>
             
-            <!-- Citizen Info Box -->
-            <div style="background: #f7fafc; padding: 12px; border-radius: 8px; margin-bottom: 12px; border-left: 4px solid #4fd1c5; font-size: 14px;">
-              <p style="margin: 0 0 5px 0;"><strong><i class="fa-solid fa-user"></i> Filed By:</strong> ${ticket.name || ticket.complainantName || 'Citizen (Name not provided)'}</p>
-              <p style="margin: 0;"><strong><i class="fa-solid fa-phone"></i> Contact:</strong> ${ticket.phone || ticket.contact || 'No contact provided'}</p>
+            <div class="badge" style="background: #ebf8ff; color: #2b6cb0; padding: 6px 12px; border-radius: 20px; font-size: 13px; font-weight: 600; display: inline-block; margin-bottom: 15px;">
+              <i class="fa-solid fa-user-shield"></i> Assigned To: ${ticket.assignedTo || 'Level 0 Officer'}
+            </div>
+            
+            <!-- Complainant Info Box (High contrast for visibility) -->
+            <div style="background: #f1f5f9; padding: 15px; border-radius: 8px; margin-bottom: 15px; border-left: 4px solid #3b82f6; color: #334155;">
+              <h4 style="margin: 0 0 10px 0; font-size: 13px; color: #475569; text-transform: uppercase; letter-spacing: 0.5px;">Complainant Details</h4>
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; font-size: 14px;">
+                <div><strong><i class="fa-solid fa-user"></i> Name:</strong> <br>${displayName}</div>
+                <div><strong><i class="fa-solid fa-phone"></i> Phone:</strong> <br>${displayPhone}</div>
+                <div><strong><i class="fa-solid fa-location-dot"></i> Address:</strong> <br>${displayAddress}</div>
+              </div>
             </div>
 
-            <!-- Complaint Details Box -->
-            <div style="background: #ffffff; padding: 12px; border: 1px solid #e2e8f0; border-radius: 6px; margin-bottom: 12px;">
-              <strong style="color: #4a5568; font-size: 14px; text-transform: uppercase;">Incident Details:</strong>
-              <p style="margin: 5px 0 0 0; font-size: 14px; color: #2d3748; line-height: 1.5;">${ticket.description || 'No description provided.'}</p>
+            <!-- Incident Details Box -->
+            <div style="background: #ffffff; padding: 15px; border: 1px solid #e2e8f0; border-radius: 8px; margin-bottom: 15px;">
+              <h4 style="margin: 0 0 8px 0; color: #4a5568; font-size: 13px; text-transform: uppercase;">Incident Details</h4>
+              <p style="margin: 0; font-size: 15px; color: #1e293b; line-height: 1.6; white-space: pre-wrap;">${ticket.description || 'No description provided.'}</p>
             </div>
 
-            <p style="font-size: 13px; color: #718096; margin: 0;">Tracking ID: ${ticket._id}</p>
+            <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px dashed #cbd5e1; padding-top: 12px;">
+              <p style="font-size: 12px; color: #64748b; margin: 0; font-family: monospace;">Tracking ID: ${ticket._id}</p>
+              <p style="font-size: 12px; color: #64748b; margin: 0;">Date: ${ticket.createdAt ? new Date(ticket.createdAt).toLocaleDateString() : 'N/A'}</p>
+            </div>
           `;
           container.appendChild(div);
         });
