@@ -8,19 +8,27 @@
   <link rel="stylesheet" href="/style.css">
 
   <style>
+    html {
+      scroll-behavior: smooth;
+    }
+    
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-      display: flex;
-      justify-content: center;
-      align-items: center;
       min-height: 100vh;
       margin: 0;
       color: #e2e8f0; 
-      padding: 20px 0;
       box-sizing: border-box;
+      /* Background is handled by your style.css */
     }
 
-    /* --- New Home Container Styling --- */
+    .page-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px 80px 20px;
+    }
+
+    /* --- Existing Home Container Styling --- */
     .home-container {
       text-align: center;
       max-width: 850px;
@@ -30,7 +38,7 @@
       border-radius: 12px;
       box-shadow: 0 10px 30px rgba(0,0,0,0.5);
       border: 1px solid rgba(255, 255, 255, 0.12);
-      margin-top: 40px;
+      margin-top: 20px;
     }
     .home-container h1 {
       font-size: 38px;
@@ -91,6 +99,74 @@
       box-shadow: 0 0 15px rgba(229, 62, 62, 0.4);
     }
 
+    /* --- Scroll Indicator & History Section --- */
+    .scroll-indicator {
+      margin-top: 40px;
+      text-align: center;
+      animation: bounce 2s infinite;
+    }
+    .scroll-indicator a {
+      color: #90cdf4;
+      text-decoration: none;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+    @keyframes bounce {
+      0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+      40% { transform: translateY(-10px); }
+      60% { transform: translateY(-5px); }
+    }
+
+    .history-container {
+      max-width: 900px;
+      padding: 40px 50px;
+      background: rgba(16, 21, 32, 0.92); 
+      backdrop-filter: blur(10px);
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      margin-top: 40px;
+      text-align: left;
+    }
+    .history-container h2 {
+      font-size: 28px;
+      color: #ffffff;
+      margin-top: 0;
+      border-bottom: 2px solid #2b6cb0;
+      padding-bottom: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .history-container h3 {
+      color: #90cdf4;
+      font-size: 18px;
+      margin-top: 35px;
+      margin-bottom: 15px;
+    }
+    .history-container p {
+      font-size: 15.5px;
+      line-height: 1.8;
+      color: #cbd5e1;
+      text-align: justify;
+    }
+    .history-container ul {
+      padding-left: 20px;
+    }
+    .history-container li {
+      font-size: 15px;
+      line-height: 1.8;
+      color: #cbd5e1;
+      margin-bottom: 12px;
+    }
+    .history-container strong {
+      color: #e2e8f0;
+    }
+
     /* --- Existing Login Container Styling --- */
     .login-container {
       background: rgba(16, 21, 32, 0.88); 
@@ -102,9 +178,8 @@
       max-width: 440px;
       text-align: center;
       border: 1px solid rgba(255, 255, 255, 0.12); 
-      margin-top: 40px;
+      margin-top: 20px;
     }
-
     .portal-logo {
       width: 70px;
       height: 70px;
@@ -118,7 +193,6 @@
       box-shadow: 0 0 15px rgba(43, 108, 176, 0.3);
       position: relative;
     }
-    
     .portal-logo::after {
       content: 'JP';
       font-size: 28px;
@@ -126,7 +200,6 @@
       color: #fff;
       position: absolute;
     }
-
     .login-container h2 {
       color: #fff;
       font-size: 24px;
@@ -157,14 +230,12 @@
       border-radius: 6px;
       transition: all 0.3s ease;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
     }
     .tab-btn.active {
       background: linear-gradient(135deg, #2c5282 0%, #1a365d 100%);
       color: #fff;
       box-shadow: 0 2px 8px rgba(0,0,0,0.3);
     }
-
     .form-group { margin-bottom: 18px; text-align: left; }
     label { display: block; margin-bottom: 6px; font-weight: 600; color: #a0aec0; font-size: 13px; }
     input { width: 100%; padding: 12px 14px; border: 1px solid #4a5568; border-radius: 6px; box-sizing: border-box; background-color: #1a202c; color: #e2e8f0; font-size: 15px; }
@@ -172,13 +243,10 @@
 
     .submit-btn { width: 100%; padding: 13px; background: linear-gradient(135deg, #2c5282 0%, #1a365d 100%); color: white; border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 6px; font-size: 15px; font-weight: 700; cursor: pointer; margin-top: 10px; text-transform: uppercase; box-shadow: 0 4px 12px rgba(0,0,0,0.2); transition: 0.3s; }
     .submit-btn:hover { background: linear-gradient(135deg, #3182ce 0%, #2c5282 100%); box-shadow: 0 6px 18px rgba(43, 108, 176, 0.3); }
-
     .traffic-btn { background: linear-gradient(135deg, #c53030 0%, #742a2a 100%); }
     .traffic-btn:hover { background: linear-gradient(135deg, #e53e3e 0%, #c53030 100%); }
-
     .login-form { display: none; }
     .login-form.active { display: block; }
-    
     .extra-links { margin-top: 25px; font-size: 13px; display: flex; flex-direction: column; gap: 12px; align-items: center; }
     .public-btn { color: #63b3ed !important; font-weight: bold; text-decoration: none; }
     .public-btn:hover { color: #90cdf4 !important; text-decoration: underline; }
@@ -193,6 +261,8 @@
     }
     .officer-toggle-btn:hover { background: #fc8181; }
   </style>
+  <!-- Add FontAwesome for the bounce arrow -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
 <body>
   
@@ -217,65 +287,97 @@
     </div>
   </nav>
 
-  <!-- VIEW 1: CITIZEN HOME PAGE (Visible by default) -->
-  <div class="home-container" id="home-view">
-    <div class="portal-logo" style="width: 80px; height: 80px;"></div>
-    <h1>Jamshedpur Police</h1>
-    <h3>Service • Security • Integrity</h3>
-    <p>
-      Welcome to the TRINETRA Smart Policing Portal. Established to protect and serve the vibrant industrial hub of East Singhbhum, our force is dedicated to maintaining law and order, preventing crime, and ensuring the absolute safety of all citizens. Through this unified digital ecosystem, we are taking a technological leap to bridge the gap between law enforcement and the community. Citizens can now instantly report incidents, access critical emergency services, and view real-time security alerts directly from their devices.
-    </p>
-    <div class="action-buttons">
-      <a href="citizen-complaint.html" class="action-btn btn-primary">File a Complaint</a>
-      <a href="sos-panic.html" class="action-btn btn-danger">Emergency SOS</a>
-    </div>
-  </div>
-
-  <!-- VIEW 2: OFFICER LOGIN PORTAL (Hidden by default) -->
-  <div class="login-container" id="login-view" style="display: none;">
-    <div class="portal-logo"></div>
-    <h2>Jamshedpur Police</h2>
-
-    <div class="tab-container">
-      <button type="button" class="tab-btn active" onclick="switchTab('general')">City/Urban Police</button>
-      <button type="button" class="tab-btn" onclick="switchTab('traffic')">Traffic Police</button>
+  <div class="page-wrapper">
+    <!-- VIEW 1: CITIZEN HOME PAGE (Visible by default) -->
+    <div class="home-container" id="home-view">
+      <div class="portal-logo" style="width: 80px; height: 80px;"></div>
+      <h1>Jamshedpur Police</h1>
+      <h3>Service • Security • Integrity</h3>
+      <p>
+        Welcome to the TRINETRA Smart Policing Portal. Established to protect and serve the vibrant industrial hub of East Singhbhum, our force is dedicated to maintaining law and order, preventing crime, and ensuring the absolute safety of all citizens. Through this unified digital ecosystem, we are taking a technological leap to bridge the gap between law enforcement and the community. Citizens can now instantly report incidents, access critical emergency services, and view real-time security alerts directly from their devices.
+      </p>
+      <div class="action-buttons">
+        <a href="citizen-complaint.html" class="action-btn btn-primary">File a Complaint</a>
+        <a href="sos-panic.html" class="action-btn btn-danger">Emergency SOS</a>
+      </div>
     </div>
 
-    <form id="general-login-form" class="login-form active">
-      <div class="form-group">
-        <label for="badge">City Police Badge Number</label>
-        <input type="text" id="badge" required placeholder="e.g. OFF-101">
-      </div>
-      <div class="form-group">
-        <label for="password">Password</label>
-        <input type="password" id="password" required placeholder="••••••••">
-      </div>
-      <button type="submit" class="submit-btn">Login to City Portal</button>
-      <div id="general-error" class="error-msg">Invalid credentials.</div>
-    </form>
-
-    <form id="traffic-login-form" class="login-form">
-      <div class="form-group">
-        <label for="traffic-badge">Traffic Badge / Constable ID</label>
-        <input type="text" id="traffic-badge" required placeholder="e.g. TRF-101">
-      </div>
-      <div class="form-group">
-        <label for="traffic-password">Password</label>
-        <input type="password" id="traffic-password" required placeholder="••••••••">
-      </div>
-      <button type="submit" class="submit-btn traffic-btn">Login to Traffic Dashboard</button>
-      <div id="traffic-error" class="error-msg">Invalid credentials.</div>
-    </form>
-
-    <div class="extra-links">
-      <a href="/citizen-complaint.html" class="public-btn">📢 File Public Complaint / FIR</a>
-      <a href="/report-missing.html" class="public-btn" style="color: #fbbf24 !important;">📝 Report Missing Person</a>
-      <a href="/wanted-missing.html" class="public-btn" style="color: #a78bfa !important;">👀 View Missing & Wanted Database</a>
-      <a href="/secure-evidence.html" class="public-btn" style="color: #38bdf8 !important;">🛡️ Secure Evidence Upload</a>
-      <a href="/sos-panic.html" class="sos-btn">🚨 EMERGENCY SOS / PANIC</a>
+    <!-- BOUNCING SCROLL ARROW -->
+    <div class="scroll-indicator" id="scroll-arrow">
+      <a href="#history-section">
+        Scroll To Discover Our Legacy
+        <i class="fa-solid fa-chevron-down" style="font-size: 20px;"></i>
+      </a>
     </div>
-    <div class="security-notice">
-      System monitored. Unauthorized usage strictly prohibited.
+
+    <!-- VIEW 2: HISTORY SECTION -->
+    <div class="history-container" id="history-section">
+      <h2>Legacy of Jamshedpur Police</h2>
+      <p>The Jamshedpur Police structure officially dates back to 1933, when the Jamshedpur Police District was first formed under British rule to oversee the rapidly expanding industrial township. Over nearly a century, the force has evolved from managing early labor disputes into a modernized, tech-driven wing of the Jharkhand Police.</p>
+      
+      <h3>Key Historical Milestones</h3>
+      <ul>
+        <li><strong>Establishment (1933):</strong> Initially created as a dedicated police district to handle security, industrial theft, and labor agitations surrounding the growth of TISCO (Tata Steel) and TELCO (Tata Motors).</li>
+        <li><strong>Creation of the Rail District (1974):</strong> On March 24, 1974, the Jamshedpur Rail Police District was established in undivided Bihar to protect passengers and secure the heavy freight corridors fueling the industrial hub.</li>
+        <li><strong>The 1990s Crackdown on Organized Crime:</strong> By the late 1980s and early 1990s, the steel-scrap trade and real estate extortion led to a massive rise in mafia gang wars. Between 1994 and 1996, the City SP, Dr. Ajoy Kumar, launched a famous, highly aggressive crackdown against top gang factions, successfully restoring civic order and preventing an industrial collapse.</li>
+        <li><strong>Transition to Jharkhand (2000):</strong> Following the bifurcation of Bihar on November 15, 2000, Jamshedpur became the headquarters of the East Singhbhum District Police under the newly formed state of Jharkhand.</li>
+      </ul>
+
+      <h3>Present-Day Operations & Modernization</h3>
+      <p>Today, the Jamshedpur Police operates out of the East Singhbhum District under the Kolhan Division. The force focuses heavily on curbing Naxal-affected borders, preventing industrial cheating, and using digital upgrades:</p>
+      <ul>
+        <li><strong>Tech Upgrades:</strong> The city has transitioned from manual logbooks to a QR code-based e-beat system across more than 1,500 patrolling points to monitor real-time police movement and accountability.</li>
+        <li><strong>Cyber Security:</strong> To counter online fraud, a dedicated Jamshedpur Cyber Crime Police Station operates out of the city.</li>
+        <li><strong>Specialized Units:</strong> The Rail Police utilizes dedicated Quick Response Teams (QRT) and advanced technical cells to track down transit crimes.</li>
+      </ul>
+    </div>
+
+    <!-- VIEW 3: OFFICER LOGIN PORTAL (Hidden by default) -->
+    <div class="login-container" id="login-view" style="display: none;">
+      <div class="portal-logo"></div>
+      <h2>Jamshedpur Police</h2>
+
+      <div class="tab-container">
+        <button type="button" class="tab-btn active" onclick="switchTab('general')">City/Urban Police</button>
+        <button type="button" class="tab-btn" onclick="switchTab('traffic')">Traffic Police</button>
+      </div>
+
+      <form id="general-login-form" class="login-form active">
+        <div class="form-group">
+          <label for="badge">City Police Badge Number</label>
+          <input type="text" id="badge" required placeholder="e.g. OFF-101">
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" required placeholder="••••••••">
+        </div>
+        <button type="submit" class="submit-btn">Login to City Portal</button>
+        <div id="general-error" class="error-msg">Invalid credentials.</div>
+      </form>
+
+      <form id="traffic-login-form" class="login-form">
+        <div class="form-group">
+          <label for="traffic-badge">Traffic Badge / Constable ID</label>
+          <input type="text" id="traffic-badge" required placeholder="e.g. TRF-101">
+        </div>
+        <div class="form-group">
+          <label for="traffic-password">Password</label>
+          <input type="password" id="traffic-password" required placeholder="••••••••">
+        </div>
+        <button type="submit" class="submit-btn traffic-btn">Login to Traffic Dashboard</button>
+        <div id="traffic-error" class="error-msg">Invalid credentials.</div>
+      </form>
+
+      <div class="extra-links">
+        <a href="/citizen-complaint.html" class="public-btn">📢 File Public Complaint / FIR</a>
+        <a href="/report-missing.html" class="public-btn" style="color: #fbbf24 !important;">📝 Report Missing Person</a>
+        <a href="/wanted-missing.html" class="public-btn" style="color: #a78bfa !important;">👀 View Missing & Wanted Database</a>
+        <a href="/secure-evidence.html" class="public-btn" style="color: #38bdf8 !important;">🛡️ Secure Evidence Upload</a>
+        <a href="/sos-panic.html" class="sos-btn">🚨 EMERGENCY SOS / PANIC</a>
+      </div>
+      <div class="security-notice">
+        System monitored. Unauthorized usage strictly prohibited.
+      </div>
     </div>
   </div>
 
@@ -283,18 +385,25 @@
     // --- Toggle Logic for Home vs Login ---
     document.getElementById('toggle-view-btn').addEventListener('click', function() {
       const homeView = document.getElementById('home-view');
+      const historyView = document.getElementById('history-section');
+      const scrollArrow = document.getElementById('scroll-arrow');
       const loginView = document.getElementById('login-view');
       
       if (loginView.style.display === 'none') {
-        // Show Login
+        // Hide Home/History, Show Login
         loginView.style.display = 'block';
         homeView.style.display = 'none';
+        historyView.style.display = 'none';
+        scrollArrow.style.display = 'none';
         this.textContent = 'Back to Home';
         this.style.background = '#4a5568'; // Neutral color for back button
+        window.scrollTo(0, 0); // Scroll to top for login
       } else {
-        // Show Home
+        // Show Home/History, Hide Login
         loginView.style.display = 'none';
         homeView.style.display = 'block';
+        historyView.style.display = 'block';
+        scrollArrow.style.display = 'block';
         this.textContent = 'Officer Login';
         this.style.background = '#e53e3e'; // Red color for login button
       }
