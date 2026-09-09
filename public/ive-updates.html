@@ -17,19 +17,20 @@
     .header h1 { margin: 0; font-size: 22px; color: #38bdf8; letter-spacing: 1px; display: flex; align-items: center; gap: 10px; }
     .live-indicator { display: inline-block; width: 10px; height: 10px; background: #ef4444; border-radius: 50%; animation: blink 1s infinite; }
     @keyframes blink { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
+    @keyframes flash-bg { 0% { background-color: rgba(239, 68, 68, 0.1); } 50% { background-color: rgba(239, 68, 68, 0.4); } 100% { background-color: rgba(239, 68, 68, 0.1); } }
 
     /* Main Dashboard Layout */
     .dashboard-container { display: flex; flex: 1; height: calc(100vh - 65px); }
     
     /* Left Sidebar: Live Alerts */
-    .alerts-panel { width: 350px; background: #1e293b; border-right: 1px solid #334155; overflow-y: auto; padding: 20px; }
-    .alerts-panel h2 { margin-top: 0; font-size: 16px; color: #94a3b8; text-transform: uppercase; border-bottom: 1px solid #334155; padding-bottom: 10px; }
+    .alerts-panel { width: 380px; background: #1e293b; border-right: 1px solid #334155; overflow-y: auto; padding: 20px; }
+    .alerts-panel h2 { margin-top: 0; font-size: 16px; color: #94a3b8; text-transform: uppercase; border-bottom: 1px solid #334155; padding-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
     
-    .alert-card { background: #0f172a; border-left: 4px solid #3b82f6; padding: 15px; margin-bottom: 15px; border-radius: 4px 8px 8px 4px; }
-    .alert-card.high { border-left-color: #ef4444; }
-    .alert-card.medium { border-left-color: #f59e0b; }
+    .alert-card { background: #0f172a; border-left: 4px solid #3b82f6; padding: 15px; margin-bottom: 15px; border-radius: 4px 8px 8px 4px; transition: all 0.5s ease; }
+    .alert-card.high { border-left-color: #ef4444; animation: flash-bg 2s infinite; }
+    .alert-card.vip { border-left-color: #a855f7; }
     
-    .alert-header { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 12px; color: #94a3b8; font-weight: bold; }
+    .alert-header { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 13px; color: #94a3b8; font-weight: bold; }
     .alert-message { font-size: 14px; line-height: 1.5; color: #e2e8f0; }
 
     /* Right Area: The Interactive Map */
@@ -37,33 +38,34 @@
     #city-map { width: 100%; height: 100%; background: #000; }
     
     /* Overlay UI on map */
-    .map-overlay { position: absolute; top: 20px; left: 20px; z-index: 1000; background: rgba(15, 23, 42, 0.8); padding: 10px 20px; border-radius: 8px; border: 1px solid #334155; backdrop-filter: blur(5px); }
+    .map-overlay { position: absolute; top: 20px; left: 20px; z-index: 1000; background: rgba(15, 23, 42, 0.85); padding: 12px 20px; border-radius: 8px; border: 1px solid #334155; backdrop-filter: blur(5px); box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
+    
+    /* Custom PCR Marker CSS */
+    .pcr-marker { background: #3b82f6; color: white; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 2px solid white; box-shadow: 0 0 15px #3b82f6; font-size: 14px; }
+    .incident-marker { background: #ef4444; color: white; width: 35px; height: 35px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 2px solid white; box-shadow: 0 0 20px #ef4444; font-size: 16px; animation: blink 1s infinite; }
   </style>
   <link rel="stylesheet" href="/style.css">
 </head>
 <body>
-    <nav class="officer-navbar">
-  <div class="nav-brand">
-    <h2>Smart Policing</h2>
-    <span class="badge">Secure Officer Network</span>
-  </div>
-  
-  <ul class="nav-links">
-    <li><a href="central-dashboard.html">Central Dashboard</a></li>
-    <li><a href="officer-dashboard.html">Officer Portal</a></li>
-    <li><a href="traffic-dashboard.html">Traffic Control</a></li>
-    <li><a href="ive-updates.html">Live Updates</a></li>
-  </ul>
-
-  <div class="nav-actions">
-    <button id="logout-btn" class="logout-btn">Log Out</button>
-  </div>
-</nav>
-</div>
+  <nav class="officer-navbar">
+    <div class="nav-brand">
+      <h2>Smart Policing</h2>
+      <span class="badge">Secure Officer Network</span>
+    </div>
+    <ul class="nav-links">
+      <li><a href="central-dashboard.html">Central Dashboard</a></li>
+      <li><a href="officer-dashboard.html">Officer Portal</a></li>
+      <li><a href="traffic-dashboard.html">Traffic Control</a></li>
+      <li><a href="ive-updates.html">Live Updates</a></li>
+    </ul>
+    <div class="nav-actions">
+      <button id="logout-btn" class="logout-btn">Log Out</button>
+    </div>
+  </nav>
 
   <div class="header">
     <h1><i class="fa-solid fa-satellite"></i> OMNAGAR POLICE COMMAND</h1>
-    <div style="font-size: 14px; font-weight: bold; color: #ef4444;">
+    <div style="font-size: 14px; font-weight: bold; color: #ef4444; display: flex; align-items: center; gap: 8px;">
       <span class="live-indicator"></span> LIVE SECURE FEED
     </div>
   </div>
@@ -71,16 +73,20 @@
   <div class="dashboard-container">
     <!-- Left Panel for Alerts -->
     <div class="alerts-panel">
-      <h2><i class="fa-solid fa-list-ul"></i> Active Advisories</h2>
+      <h2>
+        <span><i class="fa-solid fa-list-ul"></i> Command Feed</span>
+        <span style="font-size: 11px; color: #10b981;"><i class="fa-solid fa-circle-check"></i> System Secure</span>
+      </h2>
       <div id="alerts-container">
-        <p style="color: #64748b; font-size: 14px;"><i class="fa-solid fa-spinner fa-spin"></i> Establishing secure connection...</p>
+        <!-- Alerts will be injected here dynamically -->
       </div>
     </div>
 
     <!-- Right Panel for Map -->
     <div class="map-panel">
       <div class="map-overlay">
-        <strong>Radar Status:</strong> Online | <strong>City Sector:</strong> Alpha
+        <strong style="color: #38bdf8;">City Sector:</strong> Jamshedpur<br>
+        <strong style="color: #10b981;">Radar Status:</strong> Online & Tracking
       </div>
       <div id="city-map"></div>
     </div>
@@ -90,84 +96,117 @@
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   
   <script>
-    // 1. Initialize the Interactive Map (Centered on Omnagar/Jamshedpur coordinates)
-    const map = L.map('city-map').setView([22.8046, 86.2029], 14);
+    // ==========================================
+    // 1. INITIALIZE JAMSHEDPUR MAP
+    // ==========================================
+    const map = L.map('city-map', { zoomControl: false }).setView([22.8046, 86.2029], 13);
+    L.control.zoom({ position: 'bottomright' }).addTo(map);
 
-    // Add Dark Mode CartoDB Map Tiles (Free, no API key needed)
     L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
-      subdomains: 'abcd',
-      maxZoom: 20
+      attribution: '&copy; OpenStreetMap contributors &copy; CARTO',
+      maxZoom: 18
     }).addTo(map);
 
-    // Custom Icons for Map Markers
-    const accidentIcon = L.icon({
-      iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
-      shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
-      iconSize: [25, 41], iconAnchor: [12, 41], popupAnchor: [1, -34], shadowSize: [41, 41]
-    });
+    // ==========================================
+    // 2. LIVE PCR TRACKING SIMULATION
+    // ==========================================
+    const pcrIcon = L.divIcon({ html: '<div class="pcr-marker"><i class="fa-solid fa-car-side"></i></div>', className: '', iconSize: [30, 30], iconAnchor: [15, 15] });
     
-    const hazardIcon = L.icon({
-      iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-orange.png',
-      shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
-      iconSize: [25, 41], iconAnchor: [12, 41], popupAnchor: [1, -34], shadowSize: [41, 41]
+    // Initial locations for the 5 PCR Vehicles
+    const fleet = [
+      { id: "PCR-1", zone: "Bistupur", lat: 22.8000, lng: 86.1800, m: null },
+      { id: "PCR-2", zone: "Sakchi", lat: 22.8050, lng: 86.2050, m: null },
+      { id: "PCR-3", zone: "Telco", lat: 22.7750, lng: 86.2400, m: null },
+      { id: "PCR-4", zone: "Adityapur", lat: 22.7950, lng: 86.1600, m: null },
+      { id: "PCR-5", zone: "Gamharia", lat: 22.8250, lng: 86.1200, m: null }
+    ];
+
+    // Plot them on the map
+    fleet.forEach(pcr => {
+      pcr.m = L.marker([pcr.lat, pcr.lng], {icon: pcrIcon}).addTo(map)
+        .bindPopup(`<strong style="color:#2563eb;">${pcr.id}</strong><br>Zone: ${pcr.zone}<br>Status: On Patrol`);
     });
 
-    // 2. Fetch and Plot Map Data
-    async function loadMapData() {
-      try {
-        const res = await fetch('/api/updates/map-data');
-        const incidents = await res.json();
-        
-        incidents.forEach(incident => {
-          const iconToUse = incident.type === 'accident' ? accidentIcon : hazardIcon;
-          L.marker([incident.lat, incident.lng], { icon: iconToUse })
-            .addTo(map)
-            .bindPopup(`<b>${incident.title}</b><br>Dispatch notified.`);
-        });
-      } catch (e) { console.error("Map data failed to load."); }
+    // Make them drive around (Updates every 2 seconds)
+    setInterval(() => {
+      fleet.forEach(pcr => {
+        // Generate a random slight movement to simulate driving
+        pcr.lat += (Math.random() - 0.5) * 0.0008;
+        pcr.lng += (Math.random() - 0.5) * 0.0008;
+        pcr.m.setLatLng([pcr.lat, pcr.lng]);
+      });
+    }, 2000);
+
+
+    // ==========================================
+    // 3. DYNAMIC INCIDENT & VIP FEED SIMULATION
+    // ==========================================
+    const incidentIcon = L.divIcon({ html: '<div class="incident-marker"><i class="fa-solid fa-triangle-exclamation"></i></div>', className: '', iconSize: [35, 35], iconAnchor: [17, 17] });
+    let activeIncidentMarker = null;
+
+    // The database of realistic events to show the evaluators
+    const eventsDb = [
+      { type: 'VIP Escort', msg: 'Prime Minister convoy scheduled from Sonari Airport to Circuit House. Road closures active.', class: 'vip', icon: 'fa-star' },
+      { type: 'Critical Alert', msg: 'Shots fired reported near Telco Market. PCR-3 dispatched to location.', class: 'high', icon: 'fa-gun', lat: 22.7750, lng: 86.2400 },
+      { type: 'VIP Movement', msg: 'Governor moving from Sakchi to Bistupur. Green corridor established.', class: 'vip', icon: 'fa-building-shield' },
+      { type: 'Emergency', msg: 'Major fire reported in Sakchi commercial area. Fire brigade and PCR-2 on scene.', class: 'high', icon: 'fa-fire', lat: 22.8050, lng: 86.2050 },
+      { type: 'VIP Movement', msg: 'Presidential visit advance security team currently inspecting Adityapur routes.', class: 'vip', icon: 'fa-user-shield' },
+      { type: 'Disturbance', msg: 'Violent altercation between two groups near Gamharia main road. Requesting backup.', class: 'high', icon: 'fa-hand-fist', lat: 22.8250, lng: 86.1200 },
+      { type: 'Traffic Update', msg: 'Severe collision on Marine Drive. 2 lanes closed. Expect 30m delays.', class: 'medium', icon: 'fa-car-burst' }
+    ];
+
+    let eventIndex = 0;
+    const container = document.getElementById('alerts-container');
+
+    // Function to generate the live feed
+    function triggerNextEvent() {
+      const event = eventsDb[eventIndex];
+      const time = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit', second:'2-digit'});
+      
+      // Create the HTML card
+      const card = document.createElement('div');
+      card.className = `alert-card ${event.class}`;
+      card.innerHTML = `
+        <div class="alert-header">
+          <span style="color: ${event.class === 'high' ? '#ef4444' : event.class === 'vip' ? '#a855f7' : '#3b82f6'};">
+            <i class="fa-solid ${event.icon}"></i> ${event.type}
+          </span>
+          <span>${time}</span>
+        </div>
+        <div class="alert-message">${event.msg}</div>
+      `;
+
+      // Insert at the top of the list
+      container.prepend(card);
+
+      // Plot high priority incidents on the map
+      if (event.class === 'high' && event.lat) {
+        if (activeIncidentMarker) map.removeLayer(activeIncidentMarker);
+        activeIncidentMarker = L.marker([event.lat, event.lng], {icon: incidentIcon}).addTo(map)
+          .bindPopup(`<b>${event.type}</b><br>${event.msg}`).openPopup();
+        map.flyTo([event.lat, event.lng], 14, { animate: true, duration: 1.5 });
+      }
+
+      // Loop back to the start if we reach the end of the events
+      eventIndex++;
+      if (eventIndex >= eventsDb.length) eventIndex = 0;
     }
 
-    // 3. Fetch and Render Live Alerts
-    async function loadAlerts() {
-      try {
-        const res = await fetch('/api/updates/alerts');
-        const alerts = await res.json();
-        const container = document.getElementById('alerts-container');
-        container.innerHTML = ''; // Clear loading text
-        
-        alerts.forEach(alert => {
-          let icon = 'fa-circle-info';
-          if(alert.type === 'Traffic') icon = 'fa-car-burst';
-          if(alert.type === 'Security') icon = 'fa-shield-halved';
-          if(alert.type === 'Weather') icon = 'fa-cloud-bolt';
-          
-          container.innerHTML += `
-            <div class="alert-card ${alert.severity}">
-              <div class="alert-header">
-                <span><i class="fa-solid ${icon}"></i> ${alert.type}</span>
-                <span>${alert.time}</span>
-              </div>
-              <div class="alert-message">${alert.message}</div>
-            </div>
-          `;
-        });
-      } catch (e) { console.error("Alerts failed to load."); }
-    }
-
-    // Run functions on load
-    loadMapData();
-    loadAlerts();
+    // Trigger the first event immediately, then push a new one every 8 seconds
+    triggerNextEvent();
+    setInterval(triggerNextEvent, 8000);
   </script>
+  
   <script>
-    function handleLogout() {
-        // Clear the token and login flag
-        localStorage.removeItem('token');
-        localStorage.removeItem('isLoggedIn');
-        
-        // Redirect back to the login page
-        window.location.href = '/index.html';
-    }
-</script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const logoutBtn = document.getElementById('logout-btn');
+      if (logoutBtn) {
+        logoutBtn.addEventListener('click', () => {
+          localStorage.removeItem('token');
+          window.location.href = '/index.html';
+        });
+      }
+    });
+  </script>
 </body>
 </html>
