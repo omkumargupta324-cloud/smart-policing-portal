@@ -7,7 +7,7 @@ const http = require('http'); // NEW: Required for WebSockets
 const { Server } = require('socket.io'); // NEW: Real-time networking
 const secureEvidenceRoutes = require('./routes/secureEvidenceRoutes');
 
-// Load the secrets from the .env file
+// Load secrets from .env
 dotenv.config();
 const connectDB = require('./config/db');
 connectDB();
@@ -17,7 +17,7 @@ startEscalationEngine();
 // Initialize the Express application
 const app = express();
 
-// NEW: Wrap the Express app with an HTTP server to support WebSockets
+// Wrap the Express app with an HTTP server to support WebSockets
 const server = http.createServer(app);
 const io = new Server(server, { cors: { origin: "*" } });
 
@@ -28,21 +28,21 @@ app.use(cors());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // ==========================================
-// MOCK DATABASE: Police Department Hierarchy
+// POLICE DEPARTMENT HIERARCHY: JAMSHEDPUR
 // ==========================================
 const departmentStructure = {
-  jurisdiction: "Omnagar",
-  chiefCommandingOfficer: "SSP, Omnagar", 
+  jurisdiction: "Jamshedpur",
+  chiefCommandingOfficer: "SSP, Jamshedpur", 
   divisions: {
     lawAndOrderWing: {
       commandingOfficer: "ASP (Law & Order)",
-      reportsTo: "SSP, Omnagar",
+      reportsTo: "SSP, Jamshedpur",
       zones: [
         {
-          zoneName: "Zone A",
+          zoneName: "Sakchi Zone",
           stations: [
-            { stationName: "Central Thana", type: "Regular", sho: "Unassigned" },
-            { stationName: "East Thana", type: "Regular", sho: "Unassigned" }
+            { stationName: "Sakchi Police Station", type: "Regular", sho: "Unassigned" },
+            { stationName: "Bistupur Police Station", type: "Regular", sho: "Unassigned" }
           ]
         }
       ],
@@ -51,16 +51,16 @@ const departmentStructure = {
           stationName: "Cyber Police Station", 
           type: "Cyber", 
           commandingOfficer: "DSP (Cyber)",
-          reportsTo: "SSP, Omnagar", 
+          reportsTo: "SSP, Jamshedpur", 
           sho: "Unassigned" 
         }
       ]
     },
     trafficWing: {
       commandingOfficer: "ASP (Traffic)",
-      reportsTo: "SSP, Omnagar",
+      reportsTo: "SSP, Jamshedpur",
       stations: [
-        { stationName: "City Traffic Thana", type: "Traffic", sho: "Unassigned" }
+        { stationName: "Golmuri Traffic Thana", type: "Traffic", sho: "Unassigned" }
       ]
     }
   }
@@ -76,7 +76,7 @@ app.get('/', (req, res) => {
 
 app.get('/api/hierarchy', (req, res) => {
   res.json({
-    message: "Omnagar Police Department structure retrieved successfully",
+    message: "Jamshedpur Police Department structure retrieved successfully",
     data: departmentStructure
   });
 });
@@ -126,17 +126,14 @@ app.get('/api/challans', async (req, res) => {
 });
 
 // ==========================================
-// NEW: REAL-TIME SOS WEBSOCKET HUB
+// REAL-TIME SOS WEBSOCKET HUB
 // ==========================================
 io.on('connection', (socket) => {
   console.log(`📱 Device connected to Emergency Network: ${socket.id}`);
   
-  // Listen for citizens triggering the SOS button
   socket.on('trigger-sos', (alertData) => {
     console.log('\n🚨 URGENT: SOS RECEIVED! 🚨');
     console.log(alertData);
-    
-    // Instantly blast this alert to all connected police dashboards
     io.emit('sos-alert', alertData);
   });
 
@@ -149,11 +146,10 @@ io.on('connection', (socket) => {
 // SERVER INITIALIZATION
 // ==========================================
 const PORT = process.env.PORT || 5000;
-// NOTE: Changed from app.listen to server.listen to support WebSockets
 server.listen(PORT, () => {
   console.log(`\n========================================`);
   console.log(`🚀 SERVER IS LIVE ON PORT ${PORT}`);
-  console.log(`🚓 JURISDICTION: Omnagar`);
+  console.log(`🚓 JURISDICTION: Jamshedpur`);
   console.log(`📡 WEBSOCKETS: Active and Listening`);
   console.log(`========================================\n`);
 });
