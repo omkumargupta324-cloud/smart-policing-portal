@@ -9,7 +9,7 @@ const missingWantedSchema = new mongoose.Schema({
   reward: { type: String, default: 'N/A' },
   photoUrl: { type: String, default: 'https://via.placeholder.com/300x200' },
   description: { type: String },
-  contactStation: { type: String, default: 'Central Thana, Omnagar' },
+  contactStation: { type: String, default: 'Central Thana, Jamshedpur' },
   status: { type: String, enum: ['Active', 'Resolved'], default: 'Active' },
   createdAt: { type: Date, default: Date.now }
 });
