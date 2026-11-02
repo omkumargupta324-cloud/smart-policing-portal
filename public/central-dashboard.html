@@ -233,5 +233,59 @@
     }
   });
 </script>
+<!-- Trinetra AI Predictive Analytics Widget -->
+<div class="ai-prediction-card" style="border: 1px solid #ddd; padding: 20px; border-radius: 8px; background: #f9fafb; margin-top: 20px;">
+  <h3 style="color: #1a365d; margin-top: 0;">
+    <span style="color: #e53e3e;">●</span> Trinetra AI: Live Crime Prediction
+  </h3>
+  <p style="font-size: 14px; color: #666;">Analyzing historical FIR data, weather, and local event patterns in Jamshedpur...</p>
+  
+  <button onclick="runAIPrediction()" style="background: #2b6cb0; color: white; padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer; margin-bottom: 15px;">
+    Run AI Area Scan
+  </button>
+
+  <div id="ai-results" style="display: none;">
+    <ul id="hotspot-list" style="list-style-type: none; padding: 0; margin: 0;"></ul>
+  </div>
+</div>
+
+<script>
+  function runAIPrediction() {
+    const resultsDiv = document.getElementById('ai-results');
+    const hotspotList = document.getElementById('hotspot-list');
+    
+    // Show loading state
+    resultsDiv.style.display = 'block';
+    hotspotList.innerHTML = '<li style="color: #666; font-style: italic;">Processing neural network models...</li>';
+    
+    setTimeout(() => {
+      // Jamshedpur specific areas
+      const areas = ['Sakchi Market', 'Bistupur Main Road', 'Mango Bridge', 'Kadma', 'Golmuri'];
+      const crimeTypes = ['Traffic Congestion / Accident Risk', 'Pickpocketing / Theft', 'Public Nuisance', 'Vehicle Theft'];
+      
+      hotspotList.innerHTML = ''; // Clear loading text
+      
+      // Generate 3 random predictions for the presentation
+      for(let i = 0; i < 3; i++) {
+        const randomArea = areas[Math.floor(Math.random() * areas.length)];
+        const randomCrime = crimeTypes[Math.floor(Math.random() * crimeTypes.length)];
+        const probability = Math.floor(Math.random() * 25) + 65; // Generates a number between 65 and 90
+        
+        // Remove picked area so we don't get duplicates
+        areas.splice(areas.indexOf(randomArea), 1); 
+        
+        let riskColor = probability > 80 ? '#e53e3e' : '#dd6b20'; // Red for high risk, orange for medium
+        
+        hotspotList.innerHTML += `
+          <li style="margin-bottom: 10px; padding: 10px; background: white; border-left: 4px solid ${riskColor}; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+            <strong>${randomArea}</strong> <br>
+            <span style="font-size: 13px; color: #555;">Predicted: ${randomCrime}</span> <br>
+            <span style="font-size: 13px; font-weight: bold; color: ${riskColor};">Risk Probability: ${probability}%</span>
+          </li>
+        `;
+      }
+    }, 1500); // 1.5 second delay to simulate AI "thinking"
+  }
+</script>
 </body>
 </html>

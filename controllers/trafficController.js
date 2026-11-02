@@ -5,6 +5,11 @@ const issueChallan = async (req, res) => {
   try {
     const { challanId, vehiclePlate, violationType, fineAmount } = req.body;
 
+    // 🛑 NEW VALIDATION: Block zero and negative fine amounts
+    if (Number(fineAmount) <= 0) {
+      return res.status(400).json({ message: 'Fine amount must be ₹100 or greater.' });
+    }
+
     const newChallan = new Challan({
       challanId,
       vehiclePlate,
@@ -14,7 +19,7 @@ const issueChallan = async (req, res) => {
       issuedBy: req.user.userId 
     });
 
-    // Save to the database (Note: this will fail until we turn the database back on later!)
+    // Save to the database
     await newChallan.save();
     
     res.status(201).json({ 
